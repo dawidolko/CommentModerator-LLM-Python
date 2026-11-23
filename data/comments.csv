@@ -1,0 +1,41 @@
+id,text,lang,toxic,category,rule
+1,"Dzięki za odpowiedź, po dodaniu await wszystko działa.",pl,0,none,§2.3
+2,"Ten kod jest napisany fatalnie, nie ma żadnej obsługi błędów i testów.",pl,0,none,§2.3
+3,"Jesteś totalnym idiotą, nawet pętli nie umiesz napisać.",pl,1,insult,§2.1
+4,"Great tutorial, I finally understand how closures work.",en,0,none,§2.3
+5,"Only a complete moron would push this to production.",en,1,insult,§2.1
+6,"Ale to jest wkurzające, czwarty raz instaluję sterowniki i dalej nic.",pl,0,none,§2.3
+7,"Kup tanie konto premium na www.super-promo.example, kod RABAT50 daje -50%!",pl,1,spam,§5.1
+8,"Earn $500 a day working from home, click bit.ly/xx-cash now!!!",en,1,spam,§5.2
+9,"Uważaj co piszesz, wiem gdzie pracujesz i jeszcze się spotkamy.",pl,1,threat,§3.1
+10,"If you post that again I will find you and break your fingers.",en,1,threat,§3.1
+11,"Co za k*rwa żenada, ten framework to dno.",pl,1,obscene,§4.1
+12,"This library is sh*t, the docs are f*cking useless.",en,1,obscene,§4.1
+13,"Kobiety nie nadają się do programowania, niech nie piszą na tym forum.",pl,1,identity_hate,§2.2
+14,"People from that country should not be allowed to post here at all.",en,1,identity_hate,§2.2
+15,"I could kill for a coffee right now, this debugging session is endless.",en,0,none,§2.3
+16,"Zabiłeś ten temat, świetna robota z tym poradnikiem!",pl,0,none,§2.3
+17,"Ten film o historii Linuksa to bomba, polecam każdemu.",pl,0,none,§2.3
+18,"Your answer is wrong: the function returns None when the list is empty.",en,0,none,§2.3
+19,"Nie rozumiem, czemu React renderuje komponent dwa razy w trybie strict.",pl,0,none,§2.3
+20,"Ty klaunie, idź się lepiej uczyć zamiast zaśmiecać forum.",pl,1,insult,§2.1
+21,"Napiszcie do niego wszyscy na prywatnej i zróbcie mu piekło, należy mu się.",pl,1,threat,§3.2
+22,"Someone should beat up the guy who wrote this plugin.",en,1,threat,§3.2
+23,"Podaj hasło do konta, to sprawdzę czy masz wirusa: login-check.example",pl,1,spam,§5.2
+24,"KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY",pl,1,spam,§5.3
+25,"Is there any way to make pandas read_csv faster on a 2 GB file?",en,0,none,§2.3
+26,"Moim zdaniem Vue jest prostszy od Angulara, ale to kwestia gustu.",pl,0,none,§2.3
+27,"Stop whining, you are just too dumb to read the documentation.",en,1,insult,§2.1
+28,"Wysłałem ci zdjęcia bez ubrań, odpisz jak chcesz więcej ;)",pl,1,obscene,§4.2
+29,"Kurde, znowu zapomniałem średnika. Klasyka.",pl,0,none,§2.3
+30,"Thanks, the fix with useMemo solved the re-rendering problem.",en,0,none,§2.3
+31,"Ludzie po sześćdziesiątce nie powinni w ogóle pisać kodu, niech zostawią to forum młodym.",pl,1,identity_hate,§2.2
+32,"Your code is slow because you sort inside the loop, move it outside.",en,0,none,§2.3
+33,"Co za ch*jowy pomysł z tym singletonem.",pl,1,obscene,§4.1
+34,"This is the worst API design I have ever seen, nothing is consistent.",en,0,none,§2.3
+35,"Daj mi swój adres, przyjadę i pogadamy inaczej niż na forum.",pl,1,threat,§3.1
+36,"Check my new crypto token, 1000x guaranteed, link in bio!!!",en,1,spam,§5.1
+37,"Dobra robota, ale brakuje testów jednostkowych do tej klasy.",pl,0,none,§2.3
+38,"Nobody asked for your opinion, you useless clown.",en,1,insult,§2.1
+39,"Grałem wczoraj w tę grę do rana, totalnie mnie rozwaliła fabuła.",pl,0,none,§2.3
+40,"Ugh, I hate Mondays. The build broke again.",en,0,none,§2.3

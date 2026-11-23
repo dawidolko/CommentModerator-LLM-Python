@@ -1,0 +1,40 @@
+Dzięki za odpowiedź, po dodaniu await wszystko działa.
+Ten kod jest napisany fatalnie, nie ma żadnej obsługi błędów i testów.
+Jesteś totalnym idiotą, nawet pętli nie umiesz napisać.
+Great tutorial, I finally understand how closures work.
+Only a complete moron would push this to production.
+Ale to jest wkurzające, czwarty raz instaluję sterowniki i dalej nic.
+Kup tanie konto premium na www.super-promo.example, kod RABAT50 daje -50%!
+Earn $500 a day working from home, click bit.ly/xx-cash now!!!
+Uważaj co piszesz, wiem gdzie pracujesz i jeszcze się spotkamy.
+If you post that again I will find you and break your fingers.
+Co za k*rwa żenada, ten framework to dno.
+This library is sh*t, the docs are f*cking useless.
+Kobiety nie nadają się do programowania, niech nie piszą na tym forum.
+People from that country should not be allowed to post here at all.
+I could kill for a coffee right now, this debugging session is endless.
+Zabiłeś ten temat, świetna robota z tym poradnikiem!
+Ten film o historii Linuksa to bomba, polecam każdemu.
+Your answer is wrong: the function returns None when the list is empty.
+Nie rozumiem, czemu React renderuje komponent dwa razy w trybie strict.
+Ty klaunie, idź się lepiej uczyć zamiast zaśmiecać forum.
+Napiszcie do niego wszyscy na prywatnej i zróbcie mu piekło, należy mu się.
+Someone should beat up the guy who wrote this plugin.
+Podaj hasło do konta, to sprawdzę czy masz wirusa: login-check.example
+KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY
+Is there any way to make pandas read_csv faster on a 2 GB file?
+Moim zdaniem Vue jest prostszy od Angulara, ale to kwestia gustu.
+Stop whining, you are just too dumb to read the documentation.
+Wysłałem ci zdjęcia bez ubrań, odpisz jak chcesz więcej ;)
+Kurde, znowu zapomniałem średnika. Klasyka.
+Thanks, the fix with useMemo solved the re-rendering problem.
+Ludzie po sześćdziesiątce nie powinni w ogóle pisać kodu, niech zostawią to forum młodym.
+Your code is slow because you sort inside the loop, move it outside.
+Co za ch*jowy pomysł z tym singletonem.
+This is the worst API design I have ever seen, nothing is consistent.
+Daj mi swój adres, przyjadę i pogadamy inaczej niż na forum.
+Check my new crypto token, 1000x guaranteed, link in bio!!!
+Dobra robota, ale brakuje testów jednostkowych do tej klasy.
+Nobody asked for your opinion, you useless clown.
+Grałem wczoraj w tę grę do rana, totalnie mnie rozwaliła fabuła.
+Ugh, I hate Mondays. The build broke again.
