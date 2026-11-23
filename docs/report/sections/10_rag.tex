@@ -1,0 +1,43 @@
+\newpage
+\section{RAG na regulaminie forum (5.0)}
+\label{sec:rag}
+
+Moderator, który usuwa wpis, powinien wskazać złamany punkt regulaminu. Model sam z siebie nie zna regulaminu tego
+konkretnego forum, więc w trybie RAG dostaje jego fragmenty w prompcie.
+
+\subsection{Baza wiedzy}
+
+Regulamin \kod{data/rules/forum\_rules.md} ma 6 rozdziałów i 14 paragrafów. Plik \kod{rules.py} dzieli go na paragrafy
+po nagłówkach \kod{\#\#\# §X.Y}; każdy paragraf to jeden dokument. Rozdziały §1 (postanowienia ogólne) i §6 (zasady
+moderacji) nie opisują zachowań użytkowników, więc nie biorą udziału w wyszukiwaniu (\kod{skip\_sections} w
+\kod{config.yaml}). Regulamin jest po polsku, ale część komentarzy jest po angielsku, dlatego na końcu paragrafów
+dopisałem w nawiasie krótki angielski opis.
+
+\subsection{Wyszukiwanie}
+
+\kod{retrieval.py} ma trzy metody. BM25 działa na słowach po prostym ujednoliceniu: małe litery, usunięte polskie znaki
+i obcięcie słowa do 5 pierwszych liter (prymitywny stemming, który łączy np. ,,groźby'' i ,,grożenie''). Wyszukiwanie
+wektorowe używa \kod{nomic-embed-text} z prefiksami \kod{search\_document:} i \kod{search\_query:}, których ten model
+wymaga. Metoda hybrydowa łączy oba rankingi przez RRF.
+
+\zrzut{code_retrieval}{Kod: wyszukiwarka paragrafów (\kod{retrieval.py}).}
+
+\subsection{Ocena z cytatem}
+
+Do promptu trafiają 3 najlepsze paragrafy oraz zawsze §2.3 (dozwolona krytyka), żeby przy zwykłym komentarzu model
+miał paragraf, na który może się powołać. W schemacie JSON pole \kod{rule} ma listę dozwolonych wartości
+(\kod{enum}) równą numerom znalezionych paragrafów, więc model nie może wymyślić paragrafu. Na koniec kod sprawdza
+odpowiedź jeszcze raz: paragraf spoza regulaminu albo usunięcie bez paragrafu zmienia decyzję na \kod{review}.
+
+\zrzut{code_rag}{Kod: ocena komentarza z regulaminem (\kod{rag.py}).}
+
+Pierwsza wersja nie miała listy \kod{enum}, a w instrukcji było ,,podaj paragraf albo null''. Model bardzo często
+wybierał \kod{null}, także przy oczywistej groźbie, i takie komentarze trafiały do \kod{review} zamiast do
+\kod{remove}. Ograniczenie pola w schemacie rozwiązało ten problem -- wyniki obu wersji są w rozdziale
+\ref{sec:ewaluacja}.
+
+\subsection{Przykłady}
+
+\zrzut{rag_spam}{Wynik: \kod{moderator rag} dla reklamy z kodem rabatowym.}
+
+\zrzut{rag_threat}{Wynik: \kod{moderator rag} dla groźby.}

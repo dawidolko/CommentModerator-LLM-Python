@@ -1,0 +1,14 @@
+\section{Moderacja całego pliku (4.0)}
+\label{sec:wsadowo}
+
+Polecenie \kod{moderator batch} wczytuje plik CSV z kolumną \kod{text} (albo plik TXT, jeden komentarz w linii),
+ocenia komentarze po kolei z paskiem postępu i zapisuje CSV z kolumnami \kod{id, text, toxic, categories, severity,
+decision, reason, rule, latency\_s}. Obok zapisuje raport \kod{report.txt} i wykres \kod{chart.svg}.
+
+\zrzut{code_batch}{Kod: moderacja tabeli komentarzy (\kod{batch.py}).}
+
+\zrzut{batch}{Wynik: \kod{moderator batch data/comments.csv -o examples/batch/moderated.csv}.}
+
+Cały plik 40 komentarzy (tryb few-shot) zajął około 80 sekund, średnio 2,0 s na komentarz. Wynik: 17 komentarzy
+zostawionych, 3 do sprawdzenia, 20 do usunięcia. Pliki tego uruchomienia są w \kod{examples/batch/}
+(\kod{moderated.csv}, \kod{report.txt}, \kod{chart.svg}).

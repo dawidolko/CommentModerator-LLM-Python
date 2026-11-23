@@ -1,0 +1,74 @@
+\section{Konfiguracja środowiska}
+\label{sec:srodowisko}
+
+Projekt uruchamiałem na MacBooku Pro M3 Pro z 18 GB pamięci. Ollama 0.32.6 działa natywnie (Metal), aplikacja
+w Pythonie 3.12. Dokładne wersje bibliotek są przypięte w \kod{requirements.txt}.
+
+\subsection{Docker}
+
+Najprostsza droga to Docker Compose. Plik \kod{.tools/docker/docker-compose.yml} ma trzy usługi:
+\begin{itemize}
+  \item \kod{ollama} -- oficjalny obraz \kod{ollama/ollama:0.32.6}, modele trzymane w wolumenie \kod{ollama},
+  \item \kod{models} -- uruchamia się raz, pobiera trzy modele (\kod{ollama pull}) i kończy działanie,
+  \item \kod{app} -- obraz z aplikacją (Python 3.12, PyTorch w wersji CPU), startuje po pobraniu modeli i wystawia
+        aplikację webową na porcie 7860.
+\end{itemize}
+
+\begin{verbatim}
+docker compose -f .tools/docker/docker-compose.yml up --build
+docker compose -f .tools/docker/docker-compose.yml exec app moderator check
+\end{verbatim}
+
+Na macOS Docker nie ma dostępu do GPU, więc Ollama w kontenerze liczy na procesorze. Sprawdziłem cały stos w tej
+konfiguracji: ta sama groźba w trybie RAG dostała w kontenerze ten sam werdykt (\kod{remove}, §3.1), ale ocena trwała
+37,8~s zamiast 4,8~s przy Ollamie uruchomionej natywnie.
+Dlatego na Macu kontener aplikacji może korzystać z Ollamy zainstalowanej natywnie (zmienna \kod{OLLAMA\_HOST}
+wskazuje na \kod{host.docker.internal}). Skrypt \kod{start.sh} wybiera ten wariant sam, gdy wykryje działającą Ollamę.
+
+\subsection{Python bez Dockera}
+
+\begin{verbatim}
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+ollama pull qwen2.5:7b
+ollama pull gemma3:4b
+ollama pull nomic-embed-text
+moderator check
+\end{verbatim}
+
+Polecenie \kod{pip install -e .} instaluje pakiet i komendę \kod{moderator}. Ustawienia są w dwóch plikach:
+\kod{config.yaml} (modele, parametry generowania, wyszukiwanie, ścieżki) i \kod{.env} (adres Ollamy i nazwy modeli,
+wzór w \kod{.env.example}). Zmienna \kod{HF\_HUB\_DISABLE\_XET=1} omija błędy pobierania z Hugging Face, na które
+trafiłem na laboratoriach.
+
+\zrzut{code_settings}{Kod: wczytanie ustawień z \kod{config.yaml} i zmiennych środowiskowych.}
+
+Polecenie \kod{moderator check} sprawdza połączenie z Ollamą i to, czy modele są pobrane:
+
+\zrzut{check}{Wynik: \kod{moderator check}.}
+
+\subsection{Modele}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Rola & Model & Rozmiar & Dlaczego \\
+\midrule
+tekst & \kod{qwen2.5:7b} & 4,7 GB & dobrze radzi sobie z polskim, trzyma się schematu JSON \\
+obraz & \kod{gemma3:4b} & 3,3 GB & czyta tekst z obrazków, mieści się w 18 GB razem z modelem tekstowym \\
+embeddingi & \kod{nomic-embed-text} & 0,3 GB & wektory do wyszukiwania paragrafów regulaminu \\
+model bazowy & \kod{unitary/toxic-bert} & 0,4 GB & porównanie z laboratorium 2 \\
+\bottomrule
+\end{tabular}
+\caption{Modele użyte w projekcie.}
+\end{table}
+
+Klient Ollamy jest w pliku \kod{llm.py}. Ma cztery metody: zwykły czat (opcjonalnie ze schematem JSON), czat
+strumieniowy do rozmowy, zapytanie z obrazkiem i embeddingi. Parametr \kod{keep\_alive="30m"} trzyma model w pamięci
+między zapytaniami, więc przy przetwarzaniu pliku model nie ładuje się od nowa.
+
+\zrzut{code_llm}{Kod: klient Ollamy (\kod{llm.py}).}

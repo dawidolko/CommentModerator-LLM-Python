@@ -1,0 +1,117 @@
+\newpage
+\section{Ewaluacja}
+\label{sec:ewaluacja}
+
+Polecenie \kod{moderator evaluate} porównuje na 40 oznaczonych komentarzach pięć wariantów:
+\begin{itemize}
+  \item \kod{unitary/toxic-bert} z progiem 0,5 i z progiem z krzywej precision--recall (punkt, w którym precision
+        $\approx$ recall -- tak jak w laboratorium 2.3),
+  \item LLM zero-shot, few-shot i RAG.
+\end{itemize}
+Metryki: precision, recall i F1 dla klasy ,,naruszenie'', zgodność kategorii (czy właściwa kategoria jest wśród
+przewidzianych), zgodność paragrafu (tylko RAG) i średni czas na komentarz. Osobno mierzę, czy wyszukiwarka znajduje
+właściwy paragraf (Recall@1, Recall@3, MRR). Wyniki są w \kod{examples/evaluation/}.
+
+\subsection{Pierwsze uruchomienie}
+
+Pierwsze uruchomienie pokazało dwa błędy w moim prompcie i schemacie:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Wariant & Precision & Recall & F1 & Kategoria & Paragraf \\
+\midrule
+LLM zero-shot & 0,947 & 0,818 & 0,878 & 0,925 & -- \\
+LLM few-shot & 0,957 & 1,000 & 0,978 & 0,950 & -- \\
+LLM RAG & 0,957 & 1,000 & 0,978 & 0,925 & 0,600 \\
+\bottomrule
+\end{tabular}
+\caption{Pierwsze uruchomienie (\kod{examples/evaluation\_first\_run.md}).}
+\end{table}
+
+\begin{itemize}
+  \item W trybie zero-shot cztery komentarze ze spamem dostały \kod{toxic: false}, chociaż decyzja brzmiała
+        \kod{remove}. Bez definicji model rozumiał ,,toxic'' jako ,,niegrzeczny'', a spam nie jest niegrzeczny.
+        Dopisałem do promptu jedno zdanie: \kod{toxic} oznacza złamanie dowolnej zasady, także spam.
+  \item W trybie RAG model 8 razy przy naruszeniu odpowiedział \kod{rule: null}, więc kontrola zmieniała decyzję na
+        \kod{review}. Zmieniłem pole \kod{rule} w schemacie na listę dozwolonych wartości (\kod{enum}) z numerami
+        znalezionych paragrafów.
+\end{itemize}
+
+\subsection{Wyniki po poprawkach}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Wariant & Precision & Recall & F1 & Kategoria & Paragraf & Czas [s] \\
+\midrule
+toxic-bert, próg 0,50 & 1,000 & 0,318 & 0,483 & 0,600 & -- & -- \\
+toxic-bert, próg z krzywej PR (0,056) & 0,636 & 0,636 & 0,636 & 0,475 & -- & -- \\
+LLM zero-shot & 0,957 & 1,000 & 0,978 & 0,925 & -- & 1,66 \\
+LLM few-shot & 0,957 & 1,000 & 0,978 & 0,950 & -- & 1,81 \\
+LLM RAG & 0,957 & 1,000 & 0,978 & 0,950 & \textbf{0,850} & 3,81 \\
+\bottomrule
+\end{tabular}
+\caption{Wyniki na 40 komentarzach (22 naruszające zasady), \kod{qwen2.5:7b}.}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{classification.png}
+  \caption{Precision, recall, F1 i zgodność kategorii dla wszystkich wariantów.}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Wariant & EN (9 naruszeń) & PL (13 naruszeń) & \\
+\midrule
+toxic-bert, próg 0,50 & 0,714 & 0,267 & \\
+LLM few-shot & 1,000 & 0,963 & \\
+\bottomrule
+\end{tabular}
+\caption{F1 osobno dla komentarzy angielskich i polskich.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Wyszukiwarka & Recall@1 & Recall@3 & MRR \\
+\midrule
+BM25 & 0,350 & 0,650 & 0,546 \\
+embeddingi (\kod{nomic-embed-text}) & 0,525 & \textbf{0,850} & 0,682 \\
+hybryda RRF & 0,500 & 0,775 & 0,670 \\
+\bottomrule
+\end{tabular}
+\caption{Czy właściwy paragraf jest wśród znalezionych.}
+\end{table}
+
+\subsection{Co z tego wynika}
+
+\begin{itemize}
+  \item \textbf{toxic-bert} przy progu 0,5 nie myli się, gdy coś oznaczy (precision 1,0), ale łapie tylko co trzecie
+        naruszenie. Dla polskich komentarzy F1 to 0,27 -- model zna tylko angielski. Nie rozpoznaje też spamu, bo
+        nie ma takiej etykiety. Próg dobrany z krzywej PR wyrównuje precision i recall, ale przy 0,056 oznacza już
+        dużo poprawnych komentarzy.
+  \item \textbf{LLM} jest dużo lepszy we wszystkich wariantach. Jedynym fałszywym alarmem jest
+        ,,Kurde, znowu zapomniałem średnika. Klasyka.'' -- model uznał lekkie przekleństwo za naruszenie (decyzja
+        \kod{review}, nie \kod{remove}). Na 40 komentarzach zero-shot, few-shot i RAG mają po poprawkach tę samą
+        F1, więc ten zbiór jest za mały, żeby je rozróżnić w samym wykrywaniu.
+  \item \textbf{RAG} nie poprawia wykrywania, ale dodaje to, czego brakuje pozostałym wariantom: podstawę decyzji.
+        Właściwy paragraf wskazał w 85\% komentarzy. Kosztuje to dwa razy więcej czasu (embedding zapytania i dłuższy
+        prompt).
+  \item \textbf{Wyszukiwanie}: embeddingi wygrały z BM25, a hybryda wypadła gorzej niż same embeddingi. BM25 słabo
+        radzi sobie z angielskim spamem w porównaniu z polskim regulaminem (1 trafienie na 5), a RRF przenosi ten
+        błąd do wyniku łącznego. Dlatego domyślną metodą w \kod{config.yaml} jest \kod{dense}.
+\end{itemize}
+
+Uczciwie trzeba dodać, że prompt, wybór wyszukiwarki i stałe dołączanie §2.3 ustalałem, patrząc na ten sam zbiór
+40 komentarzy, więc wyniki RAG są raczej optymistyczne. Jeden komentarz to 2,5 punktu procentowego.

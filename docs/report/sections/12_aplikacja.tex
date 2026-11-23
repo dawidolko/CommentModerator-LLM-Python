@@ -1,0 +1,21 @@
+\newpage
+\section{Aplikacja webowa}
+\label{sec:aplikacja}
+
+Polecenie \kod{moderator web} (w Dockerze uruchamiane automatycznie) startuje aplikację Gradio pod adresem
+\url{http://localhost:7860}. Nagłówek pokazuje używane modele i to, czy Ollama odpowiada, więc brakujący model widać
+od razu. Każda zakładka jest osobnym plikiem w \kod{src/moderator/web/tabs/} i korzysta z tej samej klasy
+\kod{Moderator} co terminal. Wynik oceny ma postać karty: kolor i plakietka decyzji, pasek stopnia naruszenia,
+uzasadnienie, kategorie i -- w trybie RAG -- cytowany paragraf razem z jego treścią.
+
+\zrzut{web_01_single_comment}{Zakładka \emph{Single comment}: groźba oceniona w trybie RAG z cytowanym paragrafem.}
+
+\zrzut{web_02_image}{Zakładka \emph{Image}: tekst odczytany ze zrzutu ekranu i jego ocena.}
+
+\zrzut{web_03_batch}{Zakładka \emph{Batch}: statystyki, wykres, tabela i pliki wynikowe dla 40 komentarzy.}
+
+\zrzut{web_04_chat}{Zakładka \emph{Chat about a file}: pytanie o groźby, dopytanie z historią i zapisane pliki.}
+
+\zrzut{web_05_rules}{Zakładka \emph{Rules (RAG)}: wyszukiwanie paragrafów i cały regulamin.}
+
+\zrzut{web_06_evaluation}{Zakładka \emph{Evaluation}: wyniki \kod{moderator evaluate}.}

@@ -1,0 +1,69 @@
+\newpage
+\section{Parametry Ollamy}
+\label{sec:parametry}
+
+Każde zapytanie do Ollamy ma obiekt \kod{options}. Wartości używane w aplikacji są w \kod{config.yaml}: sekcja
+\kod{generation} dla moderacji (krótkie, powtarzalne odpowiedzi JSON) i sekcja \kod{chat} dla rozmowy (dłuższy,
+trochę swobodniejszy tekst).
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\linewidth}{@{}l l X@{}}
+\toprule
+Parametr & Wartość & Znaczenie \\
+\midrule
+\kod{temperature} & 0,1 (czat 0,3) & dzieli logity przed losowaniem; mała wartość -- prawie zawsze wygrywa najbardziej
+  prawdopodobny token, duża -- rozkład się spłaszcza i tekst jest bardziej różnorodny \\
+\kod{top\_p} & 0,9 & \emph{nucleus sampling}: losowanie tylko z najmniejszego zbioru tokenów, których
+  prawdopodobieństwa sumują się do \kod{top\_p} \\
+\kod{top\_k} & 40 & losowanie tylko z \kod{top\_k} najbardziej prawdopodobnych tokenów; \kod{top\_k = 1} to
+  dekodowanie zachłanne (\emph{greedy}) z laboratorium 1 \\
+\kod{seed} & 42 & stałe ziarno generatora losowego -- ten sam prompt i te same opcje dają tę samą odpowiedź \\
+\kod{num\_ctx} & 4096 (czat 8192) & okno kontekstu w tokenach; muszą się w nim zmieścić prompt, przykłady,
+  paragrafy i odpowiedź \\
+\kod{num\_predict} & 300 (czat 700) & maksymalna liczba wygenerowanych tokenów \\
+\kod{repeat\_penalty} & 1,1 & obniża prawdopodobieństwo tokenów, które już wystąpiły (przeciw pętlom, które
+  robił GPT-2) \\
+\kod{stop} & brak & napisy, na których generowanie się kończy \\
+\kod{format} & schemat JSON & ogranicza generowanie do poprawnego JSON-a zgodnego ze schematem \\
+\kod{keep\_alive} & 30 min & jak długo model zostaje w pamięci po ostatnim zapytaniu \\
+\bottomrule
+\end{tabularx}
+\caption{Parametry generowania w Ollamie.}
+\end{table}
+
+\subsection{Eksperyment}
+
+Skrypt \kod{scripts/parameter\_experiment.py} wysyła do \kod{qwen2.5:7b} te same zapytania z różnymi opcjami i zapisuje
+wyniki w \kod{examples/parameters/parameters.json}. Ziarno jest w nim domyślnie wyłączone, żeby było widać naturalną
+zmienność modelu. Wyniki jednego uruchomienia:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.4\linewidth} X@{}}
+\toprule
+Test & Wynik \\
+\midrule
+\kod{temperature} 0 / 0,7 / 1,5, ocena komentarza ,,Kurde, znowu zapomniałem średnika'' 5 razy (schemat JSON)
+  & za każdym razem \kod{review}, stopień 1 -- przy wymuszonym schemacie i jasnym prompcie decyzja nie zmieniła się
+    nawet przy $T = 1{,}5$ \\
+\kod{seed} przy $T = 0{,}9$, 3 odpowiedzi tekstowe & z ziarnem 42: 1 różna odpowiedź na 3, bez ziarna: 3 różne na 3 \\
+\kod{top\_p} 0,1 / 1,0 przy $T = 1{,}0$, 5 odpowiedzi & 1 / 5 różnych odpowiedzi \\
+\kod{top\_k} 1 / 100 przy $T = 1{,}0$, 5 odpowiedzi & 1 / 5 różnych odpowiedzi \\
+\kod{num\_predict = 15} & odpowiedź urwana w połowie: \kod{\{ "toxic": false, "categories": ["none"], "severity} --
+  takiego JSON-a nie da się odczytać \\
+\kod{format}: brak / \kod{"json"} / schemat, 5 komentarzy & poprawne oceny: 0 / 0 / 5 na 5; bez schematu model
+  zwracał skrócony JSON, np. \kod{\{"toxic": true, "reason": "insult"\}} \\
+\kod{num\_ctx} 2048 / 16384, krótki prompt & 1,26 s / 1,26 s -- przy krótkim prompcie rozmiar okna nie wpływa na czas,
+  ma znaczenie dopiero przy długim wejściu (czat o pliku) i dla zajętości pamięci \\
+\kod{stop = [","]} & odpowiedź kończy się przed pierwszym przecinkiem \\
+\bottomrule
+\end{tabularx}
+\caption{Wpływ parametrów -- wyniki \kod{scripts/parameter\_experiment.py}.}
+\end{table}
+
+Najważniejszy wniosek jest taki, że o powtarzalności decyzji bardziej decyduje wymuszony schemat (\kod{format}) niż
+sama temperatura. Temperatura, \kod{top\_p} i \kod{top\_k} wyraźnie zmieniają za to swobodny tekst -- dlatego w czacie
+temperatura jest trochę wyższa niż przy moderacji, a ziarno jest stałe w obu przypadkach.

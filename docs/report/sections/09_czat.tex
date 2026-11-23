@@ -1,0 +1,50 @@
+\newpage
+\section{Rozmowa o pliku z komentarzami (4.5)}
+\label{sec:czat}
+
+Polecenie \kod{moderator chat data/comments.txt} (oraz zakładka \emph{Chat about a file} w aplikacji) pozwala zadawać
+modelowi pytania o wczytany plik. Cały plik nie trafia do modelu jako surowy tekst. Najpierw każdy komentarz jest
+oceniany (w trybie RAG), a wynik zapisuje się w pamięci podręcznej \kod{out/cache/}, więc drugie wczytanie tego
+samego pliku jest natychmiastowe. Potem prompt systemowy dostaje tabelę z numerem, decyzją, kategoriami, stopniem,
+paragrafem, uzasadnieniem i treścią każdego komentarza. Model odpowiada na podstawie tej tabeli i podaje numery
+komentarzy (\kod{\#9}).
+
+Inżynieria promptów w czacie:
+\begin{itemize}
+  \item prompt systemowy z rolą (,,pomagasz moderatorowi przejrzeć plik''), zasadą odpowiadania w języku pytania,
+        cytowania numerów i przyznawania się, gdy tabela nie zawiera odpowiedzi,
+  \item historia rozmowy -- każde pytanie i odpowiedź są dopisywane do listy wiadomości, więc można dopytać
+        (,,a który z nich jest najgorszy?''),
+  \item odpowiedź przychodzi strumieniowo (\kod{stream=True}), parametry z sekcji \kod{chat} w \kod{config.yaml}
+        (temperatura 0,3, okno kontekstu 8192 tokeny).
+\end{itemize}
+
+Komendy w czacie: \kod{/report} zapisuje raport \kod{report.txt}, \kod{/chart} zapisuje wykres \kod{chart.svg},
+\kod{/save} zapisuje rozmowę, \kod{/exit} kończy rozmowę (i też ją zapisuje).
+
+\zrzut{code_chat}{Kod: sesja rozmowy o pliku (\kod{chat.py}).}
+
+\subsection{Przykładowa rozmowa}
+
+Skrypt \kod{scripts/chat\_example.py} zadaje cztery pytania o plik \kod{data/comments.txt}; pełny zapis jest
+w \kod{examples/chat/chat\_log.txt}, a raport i wykres w tym samym katalogu.
+
+\begin{itemize}
+  \item ,,Które komentarze są groźbami i dlaczego?'' -- model wymienił \#9, \#10 i \#35 z uzasadnieniem.
+        Pominął \#22 (,,Someone should beat up the guy\ldots''), który przy moderacji też dostał kategorię
+        \kod{threat}.
+  \item ,,A który z nich jest najpoważniejszy?'' -- pytanie odwołuje się do poprzedniej odpowiedzi i model to
+        zrozumiał dzięki historii; wskazał \#10 ze stopniem 3 (ten sam stopień ma też \#35, czego nie wspomniał).
+  \item ,,Which comments look like spam\ldots?'' -- odpowiedź po angielsku, cztery komentarze z paragrafami.
+  \item ,,Ile komentarzy trzeba usunąć\ldots?'' -- tu model się pomylił: wypisał 17 komentarzy i źle policzył
+        kategorie, a według raportu do usunięcia jest 22.
+\end{itemize}
+
+To typowe zachowanie modelu językowego: dobrze znajduje i tłumaczy konkretne wpisy, ale słabo liczy po długiej
+tabeli. Dlatego liczby w raporcie \kod{/report} liczy kod, a nie model.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{chart.png}
+  \caption{Wykres zapisany komendą \kod{/chart} (\kod{examples/chat/chart.svg}).}
+\end{figure}

@@ -1,0 +1,35 @@
+\section{Wnioski i ograniczenia}
+
+\begin{enumerate}
+  \item Lokalny model 7B w Ollamie wystarcza do moderacji po polsku i po angielsku. Na 40 komentarzach wykrył
+        wszystkie naruszenia (recall 1,0) z jednym fałszywym alarmem, podczas gdy \kod{unitary/toxic-bert} z
+        laboratorium 2 wykrył co trzecie, a po polsku prawie nic.
+  \item Największy wpływ na jakość miały dwie małe zmiany w prompcie i schemacie, a nie wybór trybu: definicja pola
+        \kod{toxic} (F1 zero-shot z 0,878 do 0,978) oraz ograniczenie pola \kod{rule} do znalezionych paragrafów
+        (zgodność paragrafu z 0,60 do 0,85).
+  \item Wymuszony schemat JSON (\kod{format}) jest ważniejszy niż temperatura: bez niego żadna z 5 odpowiedzi nie
+        miała pełnego formatu, a z nim decyzja nie zmieniała się nawet przy $T = 1{,}5$.
+  \item RAG nie zwiększył liczby wykrytych naruszeń, ale dał to, czego moderator potrzebuje do decyzji: wskazanie
+        paragrafu. Błędy zostały w miejscach, gdzie paragrafy są do siebie podobne (§5.1 i §5.2, §4.1 i §4.2, §3.1
+        i §3.2). Raz model usunął komentarz, cytując paragraf o dozwolonej krytyce (§2.3) -- taką niespójność warto
+        by w przyszłości też wykrywać w kodzie.
+  \item W wyszukiwaniu najlepiej wypadły same embeddingi; BM25 przegrywa, gdy komentarz jest po angielsku,
+        a regulamin po polsku, i ciągnie w dół ranking hybrydowy.
+  \item W rozmowie o pliku model dobrze znajduje i tłumaczy konkretne komentarze, ale myli się przy liczeniu.
+        Liczby w raportach liczy więc kod.
+\end{enumerate}
+
+Ograniczenia:
+\begin{itemize}
+  \item zbiór testowy jest mały (40 komentarzy) i syntetyczny, a prompt i wyszukiwarkę dobierałem na tym samym
+        zbiorze, więc liczby są raczej optymistyczne,
+  \item \kod{nomic-embed-text} jest modelem głównie angielskim; dla polskiego regulaminu lepszy byłby model
+        wielojęzyczny (np. \kod{bge-m3}),
+  \item na procesorze (Docker na macOS, komputer bez GPU) ocena jednego komentarza trwa kilkadziesiąt sekund zamiast
+        kilku,
+  \item uzasadnienia po polsku czasem zawierają błędy językowe; większy model albo polski Bielik prawdopodobnie by to
+        poprawił.
+\end{itemize}
+
+Możliwe rozszerzenia: większy, ręcznie oznaczony zbiór testowy, wielojęzyczne embeddingi, sprawdzanie uzasadnienia
+modelem NLI zdanie po zdaniu (wniosek z laboratorium 5.3) i kontrola zgodności decyzji z cytowanym paragrafem.

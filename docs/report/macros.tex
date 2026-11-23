@@ -1,0 +1,10 @@
+\newcommand{\zrzut}[2]{%
+  \begin{figure}[H]
+    \centering
+    \setlength{\fboxsep}{2pt}%
+    \fcolorbox{black!25}{white}{\includegraphics[width=\dimexpr\linewidth-6pt\relax,height=0.8\textheight,keepaspectratio]{#1}}
+    \caption{#2}
+    \label{fig:#1}
+  \end{figure}}
+
+\newcommand{\kod}[1]{\texttt{\hyphenchar\font=`\-\relax #1}}

@@ -1,0 +1,47 @@
+\newpage
+\section{Ocena pojedynczego komentarza (3.0)}
+\label{sec:klasyfikacja}
+
+\subsection{Format odpowiedzi}
+
+Każda ocena ma ten sam kształt, opisany klasą \kod{Verdict} w \kod{schema.py}. Z tej samej klasy powstaje schemat
+JSON przekazywany do Ollamy w parametrze \kod{format}, więc model nie może zwrócić kategorii spoza listy ani stopnia
+spoza zakresu 0--3. Walidator porządkuje drobiazgi: usuwa powtórzone kategorie, usuwa \kod{none} obok prawdziwej
+kategorii i dopisuje znak \kod{§} do numeru paragrafu.
+
+\zrzut{code_schema}{Kod: schemat odpowiedzi (\kod{schema.py}).}
+
+\subsection{Prompt}
+
+Prompt składa się z trzech części. Prompt systemowy ustawia rolę moderatora, definiuje sześć kategorii, stopnie
+naruszenia i zasadę wyboru decyzji, a także mówi wprost, że rzeczowa krytyka i potoczne zwroty (,,I could kill for
+a coffee'') nie są naruszeniem. Potem idzie pięć przykładów few-shot -- dwa po angielsku, trzy po polsku, w tym dwa
+dozwolone (rzeczowa uwaga i frustracja), żeby model nie uznawał każdego ostrego słowa za obelgę. Na końcu jest
+komentarz w potrójnym cudzysłowie, żeby model nie pomylił treści komentarza z poleceniem.
+
+\zrzut{code_prompt}{Kod: składanie wiadomości dla modelu (\kod{prompts.py}).}
+
+Tryb \kod{zero-shot} wysyła tylko prompt systemowy i komentarz, tryb \kod{few-shot} dokłada przykłady. Jeśli
+odpowiedzi nie da się odczytać jako JSON zgodny ze schematem, zapytanie jest ponawiane raz, a potem wynik dostaje
+decyzję \kod{review} z notatką o błędzie. Komentarz trafia wtedy do człowieka, zamiast zostać po cichu przepuszczony.
+
+\zrzut{code_classify}{Kod: zapytanie o ocenę z ponowieniem (\kod{classify.py}).}
+
+\subsection{Przykłady}
+
+Komentarz z obelgą w trybie zero-shot:
+
+\zrzut{classify_insult}{Wynik: \kod{moderator classify} w trybie zero-shot.}
+
+Komentarz z idiomem ,,I could kill for a coffee'' w trybie few-shot (domyślnym). Model rozpoznał, że to nie groźba:
+
+\zrzut{classify_idiom}{Wynik: \kod{moderator classify} dla idiomu.}
+
+Dla porównania ten sam komentarz w modelu bazowym \kod{unitary/toxic-bert} z laboratorium 2:
+
+\zrzut{bert_idiom}{Wynik: \kod{moderator bert} dla idiomu.}
+
+Tutaj oba modele zgadzają się, że idiom nie jest groźbą (najwyższy wynik toxic-bert to 0,009). Różnica jest
+w tym, że toxic-bert zwraca tylko liczby dla sześciu etykiet, a model językowy także decyzję i uzasadnienie. Widać też
+słabość małego modelu: uzasadnienia po polsku zdarzają się z błędami językowymi (,,Idioma wyrażające\ldots'',
+,,Niezaskomlone oskarżenie\ldots''), mimo że sama decyzja jest trafna.

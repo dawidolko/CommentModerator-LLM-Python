@@ -1,0 +1,38 @@
+\section{Krótko o teorii}
+
+\textbf{Moderacja treści} to decyzja, czy wpis może zostać na forum. W praktyce nie wystarczy etykieta
+,,toksyczny / nietoksyczny'' -- moderator musi wiedzieć, \emph{co} jest nie tak i \emph{na jakiej podstawie} usuwa
+wpis. Dlatego każda odpowiedź modelu ma w projekcie stały format: kategorie, stopień naruszenia (0--3), decyzję
+(\kod{allow}, \kod{review}, \kod{remove}), krótkie uzasadnienie i -- w trybie RAG -- numer paragrafu regulaminu.
+
+\textbf{Model instrukcyjny} (tutaj Qwen 2.5 7B) był po pretreningu dostrojony do wykonywania poleceń. W odróżnieniu od
+GPT-2 z laboratorium 1 nie ,,dopisuje'' dalszego ciągu tekstu, tylko odpowiada na polecenie, więc można go poprosić
+o ocenę komentarza w ustalonym formacie.
+
+\textbf{Inżynieria promptów} to dobór treści wysyłanej do modelu. W projekcie używam:
+\begin{itemize}
+  \item \textbf{promptu systemowego} z rolą (,,moderator polskiego forum programistów''), definicjami kategorii
+        i zasadą wyboru decyzji,
+  \item \textbf{few-shot}, czyli kilku przykładowych par komentarz -- odpowiedź JSON, po polsku i po angielsku,
+  \item \textbf{wymuszonego formatu}: Ollama przyjmuje schemat JSON (\kod{format}) i ogranicza generowanie tak,
+        żeby odpowiedź była zgodna ze schematem,
+  \item \textbf{niskiej temperatury i stałego ziarna} -- wniosek z laboratorium 5: przy $T=0{,}3$ odpowiedzi były
+        znacznie wierniejsze niż przy $T=1{,}0$.
+\end{itemize}
+
+\textbf{RAG} (\emph{Retrieval-Augmented Generation}) polega na tym, że przed odpowiedzią wyszukuje się fragmenty
+dokumentów pasujące do pytania i wkleja je do promptu. Model odpowiada wtedy na podstawie tych fragmentów, a nie tylko
+własnej wiedzy. Tutaj dokumentem jest regulamin forum, a fragmentem -- pojedynczy paragraf (\kod{§2.1}, \kod{§5.2}
+itd.). Do wyszukiwania używam trzech metod:
+\begin{itemize}
+  \item \textbf{BM25} -- klasyczny ranking leksykalny z laboratorium 3; liczy wspólne słowa zapytania i dokumentu
+        z poprawką na częstość słowa i długość dokumentu,
+  \item \textbf{embeddingi} (\kod{nomic-embed-text}) -- tekst zamieniany jest na wektor, a podobieństwo liczy się
+        jako cosinus kąta między wektorami; działa także przy innych słowach o podobnym znaczeniu,
+  \item \textbf{ranking hybrydowy RRF} (\emph{Reciprocal Rank Fusion}) -- łączy oba rankingi wzorem
+        $\sum 1/(k + \text{pozycja})$ z $k = 60$.
+\end{itemize}
+
+\textbf{Model bazowy} \kod{unitary/toxic-bert} to BERT dostrojony na komentarzach z Wikipedii do 6 etykiet
+(klasyfikacja wieloetykietowa, więc sigmoid i osobny próg dla etykiety, tak jak w laboratorium 2.3). Służy do
+porównania: jest szybki, ale zna tylko angielski i nie umie uzasadnić decyzji.

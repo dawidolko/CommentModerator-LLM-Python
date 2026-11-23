@@ -1,0 +1,32 @@
+\newpage
+\section{Komentarze w postaci obrazków (3.5)}
+\label{sec:obrazy}
+
+Na forach część treści to memy i zrzuty ekranu, których zwykły klasyfikator tekstu nie przeczyta. Dlatego ocena
+obrazka ma dwa kroki. Najpierw model wizyjny \kod{gemma3:4b} dostaje obrazek i polecenie: ,,przepisz cały tekst
+z obrazka i jednym zdaniem opisz, co przedstawia''. Odpowiedź ma ustalony układ (\kod{TEXT:} i \kod{PICTURE:}), z którego
+wycinam tekst. Potem ten tekst przechodzi przez tę samą ocenę co zwykły komentarz (domyślnie w trybie RAG).
+
+Mały model wizyjny czasem powtarzał tę samą linię dwa razy albo dopisywał etykietę \kod{TEXT:} w środku odpowiedzi.
+Funkcja \kod{clean\_text} usuwa etykiety i powtórzone linie, a następnie skleja tekst w jedno zdanie.
+
+\zrzut{code_vision}{Kod: odczyt tekstu z obrazka i ocena (\kod{vision.py}).}
+
+Obrazki testowe wygenerowałem skryptem \kod{scripts/make\_sample\_images.py} (Pillow): trzy memy z tekstem na górze
+i na dole oraz trzy zrzuty ekranu wpisu z forum. Dzięki temu nie używam cudzych materiałów.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.45\linewidth]{meme_03.png}\hfill
+  \includegraphics[width=0.52\linewidth]{screenshot_01.png}
+  \caption{Przykładowe obrazki: mem z groźbą i zrzut ekranu ze spamem.}
+\end{figure}
+
+\zrzut{image_meme}{Wynik: \kod{moderator image data/images/meme\_03.png}.}
+
+\zrzut{image_screenshot}{Wynik: \kod{moderator image data/images/screenshot\_01.png}.}
+
+Model wizyjny przeczytał oba obrazki poprawnie, z jednym błędem: na memie ,,NAPISZ'' odczytał jako ,,NAPIS''.
+Dla oceny nie miało to znaczenia -- komentarz dostał kategorię \kod{threat}, stopień 3 i paragraf §3.1, a reklama ze
+zrzutu ekranu kategorię \kod{spam} i paragraf §5.1. Ocena obrazka trwa około 16--18 sekund, bo do pamięci trzeba
+załadować dwa modele.

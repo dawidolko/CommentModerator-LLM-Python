@@ -1,0 +1,39 @@
+\section{Cel projektu}
+
+Celem projektu była aplikacja w Pythonie, która pomaga moderatorowi forum internetowego. Aplikacja ocenia komentarze
+(obraźliwe, wulgarne, groźby, mowa nienawiści, spam), uzasadnia decyzję cytatem z regulaminu forum, czyta komentarze
+w postaci obrazków (memy, zrzuty ekranu), przetwarza całe pliki komentarzy i pozwala rozmawiać z modelem o wczytanym
+pliku. Wszystkie modele działają lokalnie w Ollamie, bez płatnych usług i bez karty graficznej. Temat jest rozwinięciem
+tematu 15 z listy (,,Detektor toksyczności komentarzy online'') i łączy się z laboratorium 2, gdzie używałem modelu
+\kod{unitary/toxic-bert}.
+
+Projekt ma dwa interfejsy, które korzystają z tego samego kodu: polecenie \kod{moderator} w terminalu oraz aplikację
+webową w Gradio. Całość uruchamia się jednym poleceniem w Dockerze.
+
+Wymagania prowadzącego zrealizowałem po kolei, od oceny 3.0 do 5.0, w jednym projekcie:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\linewidth}{@{}l X l@{}}
+\toprule
+Ocena & Wymaganie i realizacja & Rozdział \\
+\midrule
+3.0 & Ollama jako gotowe narzędzie, kroki konfiguracji, znaczenie parametrów z eksperymentem, klasyfikacja
+      pojedynczego komentarza promptem (\kod{moderator classify}) & \ref{sec:srodowisko}, \ref{sec:parametry}, \ref{sec:klasyfikacja} \\
+3.5 & Wielomodalność: model \kod{gemma3:4b} czyta tekst z obrazka, a potem komentarz jest oceniany jak tekst
+      (\kod{moderator image}) & \ref{sec:obrazy} \\
+4.0 & Automatyzacja: hurtowa moderacja pliku CSV lub TXT do pliku CSV z oceną i uzasadnieniem
+      (\kod{moderator batch}) & \ref{sec:wsadowo} \\
+4.5 & Rozmowa przez API Ollamy o przesłanym pliku \kod{.txt} z historią, promptem systemowym i few-shot; zapis
+      raportu \kod{.txt} i wykresu \kod{.svg} (\kod{moderator chat}) & \ref{sec:czat} \\
+5.0 & RAG: wyszukiwanie paragrafów regulaminu (BM25, embeddingi, ranking hybrydowy) i decyzja z cytatem
+      \kod{§}; porównanie z wersją bez RAG (\kod{moderator rag}, \kod{moderator evaluate}) & \ref{sec:rag}, \ref{sec:ewaluacja} \\
+\bottomrule
+\end{tabularx}
+\caption{Wymagania na oceny i miejsce ich realizacji.}
+\end{table}
+
+Kod jest w repozytorium \url{https://github.com/dawidolko/CommentModerator-LLM-Python}. Wszystkie liczby
+i przykłady w tym sprawozdaniu pochodzą z prawdziwych uruchomień, a ich pliki wynikowe są w katalogu
+\kod{examples/}.

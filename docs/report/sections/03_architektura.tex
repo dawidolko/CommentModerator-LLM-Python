@@ -1,0 +1,48 @@
+\section{Architektura}
+\label{sec:architektura}
+
+Kod jest pakietem Pythona \kod{moderator} w katalogu \kod{src/}. Każdy plik robi jedną rzecz, a terminal i aplikacja
+webowa korzystają z jednej klasy \kod{Moderator} (plik \kod{service.py}), więc wynik jest taki sam niezależnie od
+interfejsu.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\linewidth}{@{}l X@{}}
+\toprule
+Plik & Zadanie \\
+\midrule
+\kod{config.py} & wczytanie \kod{config.yaml} i zmiennych środowiskowych (\kod{.env}) \\
+\kod{llm.py} & klient Ollamy: czat, czat strumieniowy, obraz, embeddingi \\
+\kod{schema.py} & schemat odpowiedzi (Pydantic) i jego walidacja \\
+\kod{prompts.py} & prompt systemowy, przykłady few-shot, szablony RAG, odczytu obrazu i czatu \\
+\kod{classify.py} & ocena komentarza (zero-shot, few-shot) z ponowieniem przy złym JSON-ie \\
+\kod{rules.py}, \kod{retrieval.py}, \kod{rag.py} & podział regulaminu na paragrafy, BM25, embeddingi, RRF, ocena z cytatem \\
+\kod{vision.py} & odczyt tekstu z obrazka modelem wizyjnym \\
+\kod{baseline.py} & model bazowy \kod{unitary/toxic-bert} \\
+\kod{batch.py}, \kod{report.py} & moderacja pliku, raport \kod{.txt}, wykres \kod{.svg} \\
+\kod{chat.py} & sesja rozmowy o pliku z historią i komendami \\
+\kod{evaluate.py} & metryki porównania wariantów \\
+\kod{cli/} & polecenia terminala (Typer + Rich), podzielone na \kod{single}, \kod{files}, \kod{tools}, \kod{views} \\
+\kod{web/} & aplikacja Gradio; każda zakładka w osobnym pliku w \kod{web/tabs/} \\
+\bottomrule
+\end{tabularx}
+\caption{Moduły pakietu \kod{moderator}.}
+\end{table}
+
+Przepływ jednego komentarza w trybie RAG wygląda tak:
+\begin{enumerate}
+  \item (tylko obrazek) \kod{gemma3:4b} odczytuje tekst z obrazka,
+  \item wyszukiwarka zwraca 3 najlepsze paragrafy regulaminu; do kontekstu zawsze dochodzi też \kod{§2.3}
+        (dozwolona krytyka), żeby model miał podstawę do zostawienia wpisu,
+  \item \kod{qwen2.5:7b} dostaje prompt systemowy, przykłady few-shot, paragrafy i komentarz, a odpowiada JSON-em
+        zgodnym ze schematem,
+  \item odpowiedź jest sprawdzana: zły JSON -- jedna ponowna próba, potem decyzja \kod{review}; paragraf, którego
+        nie ma w regulaminie, albo usunięcie bez paragrafu -- decyzja zmieniana na \kod{review}.
+\end{enumerate}
+
+Dane są w całości syntetyczne: 40 komentarzy (23 po polsku, 17 po angielsku, 22 naruszające zasady) w
+\kod{data/comments.csv} z etykietą, kategorią i właściwym paragrafem, fikcyjny regulamin forum ,,Kod po godzinach''
+(14 paragrafów w \kod{data/rules/forum\_rules.md}) oraz 6 obrazków wygenerowanych skryptem
+\kod{scripts/make\_sample\_images.py}. Komentarze toksyczne są celowo łagodne i nie zawierają prawdziwych wyzwisk wobec
+grup.
