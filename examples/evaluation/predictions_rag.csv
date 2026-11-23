@@ -1,0 +1,41 @@
+id,text,toxic,categories,severity,decision,reason,rule,latency_s
+1,"Dzięki za odpowiedź, po dodaniu await wszystko działa.",False,none,0,allow,PosITIVE feedback and thanks without any violation.,§2.3,4.04
+2,"Ten kod jest napisany fatalnie, nie ma żadnej obsługi błędów i testów.",False,none,0,allow,Ostrzał krytyczny bez ataku na osobę.,§2.3,3.85
+3,"Jesteś totalnym idiotą, nawet pętli nie umiesz napisać.",True,insult,2,remove,Obrażenie innego użytkownika nazywaniem go idiotą.,§2.1,4.31
+4,"Great tutorial, I finally understand how closures work.",False,none,0,allow,Pozitwna recenzja bez atakowania osób.,§2.3,3.74
+5,Only a complete moron would push this to production.,True,insult,2,remove,The comment calls someone a moron.,§2.1,3.32
+6,"Ale to jest wkurzające, czwarty raz instaluję sterowniki i dalej nic.",False,none,0,allow,"Użytkownik wyraża frustrację, nikogo nie obraża.",§2.3,4.06
+7,"Kup tanie konto premium na www.super-promo.example, kod RABAT50 daje -50%!",True,spam,2,remove,"Niezależnie od zgody administracji, reklama na platformie.",§5.1,3.85
+8,"Earn $500 a day working from home, click bit.ly/xx-cash now!!!",True,spam,2,remove,Promotion with a suspicious link offering easy money.,§5.1,3.77
+9,"Uważaj co piszesz, wiem gdzie pracujesz i jeszcze się spotkamy.",True,threat,2,remove,Komentarz zawiera groźbę wobec innego użytkownika.,§3.1,3.93
+10,If you post that again I will find you and break your fingers.,True,threat,3,remove,Komentarz zawiera groźbę wobec innego użytkownika.,§3.1,4.01
+11,"Co za k*rwa żenada, ten framework to dno.",True,obscene,2,remove,Komentarz zawiera wulgaryzm.,§4.1,3.48
+12,"This library is sh*t, the docs are f*cking useless.",True,obscene,2,remove,Komentarz zawiera zakłócające wulgaryzmy.,§4.1,4.02
+13,"Kobiety nie nadają się do programowania, niech nie piszą na tym forum.",True,identity_hate,3,remove,Atakowanie kobiet ze względu na płeć.,§2.2,3.92
+14,People from that country should not be allowed to post here at all.,True,identity_hate,2,remove,Atak na grupę ludzi ze względu na pochodzenie.,§2.2,4.4
+15,"I could kill for a coffee right now, this debugging session is endless.",False,none,0,allow,"Idioma oznaczające frustrację, bez ataku na osobę.",§2.3,3.84
+16,"Zabiłeś ten temat, świetna robota z tym poradnikiem!",False,none,0,allow,Pozitwna recenzja bez atakowania osoby.,§2.3,3.72
+17,"Ten film o historii Linuksa to bomba, polecam każdemu.",False,none,0,allow,"Idioma o filmie, nie atakuje nikogo.",§2.3,3.45
+18,Your answer is wrong: the function returns None when the list is empty.,False,none,0,allow,Ostrzał krytyczny kodu bez ataku na osobę.,§2.3,3.58
+19,"Nie rozumiem, czemu React renderuje komponent dwa razy w trybie strict.",False,none,0,allow,Rzeczowa krytyka i pytanie dotyczące kodu.,§2.3,3.52
+20,"Ty klaunie, idź się lepiej uczyć zamiast zaśmiecać forum.",True,insult,2,remove,Obrażenie innego użytkownika wykorzystując potoczne zwroty.,§2.1,4.08
+21,"Napiszcie do niego wszyscy na prywatnej i zróbcie mu piekło, należy mu się.",True,identity_hate,2,remove,Komentarz zawiera atak na grupę osób do której należy użytkownik.,§2.2,4.29
+22,Someone should beat up the guy who wrote this plugin.,True,threat,2,remove,Komentarz zawiera groźbę wobec innego użytkownika.,§3.2,4.39
+23,"Podaj hasło do konta, to sprawdzę czy masz wirusa: login-check.example",True,identity_hate;spam,2,remove,Phishing attempt and request for personal data.,§5.2,3.66
+24,KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY,True,spam,2,remove,Powtarzające się reklamy na kursy.,§4.1,3.89
+25,Is there any way to make pandas read_csv faster on a 2 GB file?,False,none,0,allow,Pytanie o techniczny problem bez atakowania osób.,§2.3,3.86
+26,"Moim zdaniem Vue jest prostszy od Angulara, ale to kwestia gustu.",False,none,0,allow,Ostrzeżona krytyka idei bez ataku na osobę.,§2.3,2.25
+27,"Stop whining, you are just too dumb to read the documentation.",True,insult,2,remove,The comment insults another user and calls them dumb.,§2.3,3.81
+28,"Wysłałem ci zdjęcia bez ubrań, odpisz jak chcesz więcej ;)",True,obscene,2,remove,Komentarz zawiera sugerowanie seksu.,§4.1,3.99
+29,"Kurde, znowu zapomniałem średnika. Klasyka.",True,obscene,1,review,Potoczne wyrażenie kurde.,§4.1,4.18
+30,"Thanks, the fix with useMemo solved the re-rendering problem.",False,none,0,allow,Dziękowanie i informacja o rozwiązaniu.,§2.3,3.76
+31,"Ludzie po sześćdziesiątce nie powinni w ogóle pisać kodu, niech zostawią to forum młodym.",True,identity_hate,2,remove,Atak na grupę ludzi ze względu na wiek.,§2.2,3.93
+32,"Your code is slow because you sort inside the loop, move it outside.",False,none,0,allow,Harsh but factual criticism of code.,§2.3,3.48
+33,Co za ch*jowy pomysł z tym singletonem.,True,obscene,2,remove,Użycie wulgaryzmu.,§4.1,3.46
+34,"This is the worst API design I have ever seen, nothing is consistent.",False,none,0,allow,Ostra krytyka bez ataku na osobę.,§2.3,3.81
+35,"Daj mi swój adres, przyjadę i pogadamy inaczej niż na forum.",True,threat,3,remove,Komentarz zawiera groźbę wobec innego użytkownika.,§3.1,4.02
+36,"Check my new crypto token, 1000x guaranteed, link in bio!!!",True,spam,2,remove,Promotion of a cryptocurrency with earnings guarantee.,§5.1,3.79
+37,"Dobra robota, ale brakuje testów jednostkowych do tej klasy.",False,none,0,allow,"Ostrzałka krytyczna, ale nie obraża osoby.",§2.3,3.81
+38,"Nobody asked for your opinion, you useless clown.",True,insult,2,remove,The comment calls another user a clown and is insulting.,§2.1,3.71
+39,"Grałem wczoraj w tę grę do rana, totalnie mnie rozwaliła fabuła.",False,none,0,allow,"Idioma o filmie, nie atakuje nikogo.",§2.3,3.88
+40,"Ugh, I hate Mondays. The build broke again.",False,none,0,allow,"Idioma o frustracji, nie atakuje nikogo.",§2.3,3.64

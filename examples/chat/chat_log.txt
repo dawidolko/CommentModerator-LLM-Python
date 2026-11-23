@@ -1,0 +1,72 @@
+Chat about comments.txt
+Model: qwen2.5:7b
+Date: 2026-11-23 15:30
+
+YOU: Które komentarze są groźbami i dlaczego?
+
+MODEL: Komentarze zawierające groźby to:
+
+#9 - Komentarz zawiera groźbę wobec innego użytkownika: "Uważaj co piszesz, wiem gdzie pracujesz i jeszcze się spotkamy."
+#10 - Komentarz zawiera groźbę wobce innego użytkownika: "If you post that again I will find you and break your fingers."
+#35 - Komentarz zawiera groźbę wobec innego użytkownika: "Daj mi swój adres, przyjadę i pogadamy inaczej niż na forum."
+
+Wszystkie te komentarze są zidentyfikowane jako groźby (threat) według reguł moderacji.
+
+YOU: A który z nich jest najpoważniejszy?
+
+MODEL: Zgodnie z informacjami w tabeli, komentarz #10 jest najpoważniejszy ze względu na jego stopień poważności (severity 3), co oznacza, że zawiera groźbę wobec innego użytkownika:
+
+#10 | remove | threat | 3 | §3.1 | Komentarz zawiera groźbę wobce innego użytkownika. | If you post that again I will find you and break your fingers.
+
+Stopień poważności 3 jest najwyższą z dostępnych, co sugeruje, że ta groźba jest najbardziej poważna ze wszystkich wymienionych.
+
+YOU: Which comments look like spam, and which rules do they break?
+
+MODEL: The following comments appear to be spam and the rules they break are:
+
+#7 - Spam (§5.1): "Kup tanie konto premium na www.super-promo.example, kod RABAT50 daje -50%!"
+- This comment promotes a service or product with an offer, which is against rule §5.1.
+
+#8 - Spam (§5.1): "Earn $500 a day working from home, click bit.ly/xx-cash now!!!"
+- This comment offers easy money and includes a suspicious link, which violates rule §5.1.
+
+#21 - Identity hate (§2.2) and spam (§5.2): "Podaj hasło do konta, to sprawdzę czy masz wirusa: login-check.example"
+- While this primarily breaks identity hate rules due to the personal attack, it also contains a phishing attempt which could be considered spam under rule §5.2.
+
+#24 - Spam (§5.1): "KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSU"
+- This comment is repetitive and promotional, breaking rule §5.1.
+
+These comments are flagged as spam primarily because they contain promotional content or attempts to solicit personal information through suspicious links.
+
+YOU: Ile komentarzy trzeba usunąć i jaka kategoria pojawia się najczęściej?
+
+MODEL: Zgodnie z tabelą, liczba komentarzy do usunięcia oraz ich kategorie są następujące:
+
+1. #3 - Usuń (insult)
+2. #5 - Usuń (insult)
+3. #7 - Usuń (spam)
+4. #9 - Usuń (threat)
+5. #10 - Usuń (threat)
+6. #11 - Usuń (obscene)
+7. #12 - Usuń (obscene)
+8. #13 - Usuń (identity_hate)
+9. #14 - Usuń (identity_hate)
+10. #20 - Usuń (insult)
+11. #21 - Usuń (identity_hate; spam)
+12. #23 - Usuń (phishing attempt and request for personal data, which can be considered as spam)
+13. #24 - Usuń (spam)
+14. #27 - Usuń (insult)
+15. #31 - Usuń (identity_hate)
+16. #38 - Usuń (insult)
+17. #35 - Usuń (threat)
+
+Podsumowując:
+- **Liczba komentarzy do usunięcia:** 17
+
+Kategorie pojawiające się najczęściej to:
+- **Insult** - 4 komentarze
+- **Threat** - 2 komentarze
+- **Identity_hate** - 3 komentarze
+- **Obscene** - 2 komentarze
+
+Więc najczęstsza kategoria to **insult**, z 4 komentarzami do usunięcia.

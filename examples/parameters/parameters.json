@@ -1,0 +1,67 @@
+{
+  "model": "qwen2.5:7b",
+  "comment": "This is the worst API design I have ever seen, nothing is consistent.",
+  "borderline": "Kurde, znowu zapomniałem średnika. Klasyka.",
+  "runs": 5,
+  "temperature": {
+    "0.0": {
+      "review/1": 5
+    },
+    "0.7": {
+      "review/1": 5
+    },
+    "1.5": {
+      "review/1": 5
+    }
+  },
+  "seed": {
+    "with seed 42": 1,
+    "without seed": 3,
+    "example": "This comment might upset someone because it directly criticizes their work without providing specific feedback or alternatives, which can be discouraging and unfair."
+  },
+  "top_p": {
+    "0.1": {
+      "distinct": 1,
+      "first": "This comment might upset someone because it harshly criticizes the API design without providing specific details or constructive feedback, which can be discouraging and unhelpful."
+    },
+    "1.0": {
+      "distinct": 5,
+      "first": "This comment might upset someone because it criticizes the API design harshly and without specific examples or constructive feedback, which can be discouraging and unhelpful for improvement."
+    }
+  },
+  "top_k": {
+    "1": {
+      "distinct": 1
+    },
+    "100": {
+      "distinct": 5
+    }
+  },
+  "num_predict": {
+    "15 tokens": "{ \"toxic\": false, \"categories\": [\"none\"], \"severity"
+  },
+  "format": {
+    "none": {
+      "valid": 0,
+      "of": 5,
+      "first": "{\"toxic\": true, \"reason\": \"insult\"}"
+    },
+    "json": {
+      "valid": 0,
+      "of": 5,
+      "first": "{\"toxic\": true, \"reason\": \"insult\"}"
+    },
+    "schema": {
+      "valid": 5,
+      "of": 5,
+      "first": "{\"toxic\": true, \"categories\": [\"insult\"], \"severity\": 2, \"decision\": \"remove\", \"reason\": \"Niezaskomlone oskarżenie o brak umiejętności.\"}"
+    }
+  },
+  "num_ctx": {
+    "2048": 1.26,
+    "16384": 1.26
+  },
+  "stop": {
+    "stop at comma": "This comment might upset someone because it harshly criticizes the API design without providing specific details or constructive feedback"
+  }
+}

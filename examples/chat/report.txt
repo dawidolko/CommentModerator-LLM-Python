@@ -1,0 +1,96 @@
+COMMENT MODERATION REPORT
+============================================================
+Source file:   comments.txt
+Model:         qwen2.5:7b
+Created:       2026-11-23 15:30
+Comments:      40
+Toxic:         23 (57%)
+
+Decisions
+------------------------------------------------------------
+  allow       17
+  review       1
+  remove      22
+
+Categories
+------------------------------------------------------------
+  insult           5
+  obscene          5
+  threat           4
+  identity_hate    5
+  spam             5
+  none            17
+
+Removed or sent to review (23)
+------------------------------------------------------------
+#35 [remove, severity 3, threat §3.1]
+    Daj mi swój adres, przyjadę i pogadamy inaczej niż na forum.
+    -> Komentarz zawiera groźbę wobec innego użytkownika.
+#10 [remove, severity 3, threat §3.1]
+    If you post that again I will find you and break your fingers.
+    -> Komentarz zawiera groźbę wobec innego użytkownika.
+#13 [remove, severity 3, identity_hate §2.2]
+    Kobiety nie nadają się do programowania, niech nie piszą na tym forum.
+    -> Atakowanie kobiet ze względu na płeć.
+#3 [remove, severity 2, insult §2.1]
+    Jesteś totalnym idiotą, nawet pętli nie umiesz napisać.
+    -> Obrażenie innego użytkownika nazywaniem go idiotą.
+#22 [remove, severity 2, threat §3.2]
+    Someone should beat up the guy who wrote this plugin.
+    -> Komentarz zawiera groźbę wobec innego użytkownika.
+#36 [remove, severity 2, spam §5.1]
+    Check my new crypto token, 1000x guaranteed, link in bio!!!
+    -> Promotion of a cryptocurrency with earnings guarantee.
+#33 [remove, severity 2, obscene §4.1]
+    Co za ch*jowy pomysł z tym singletonem.
+    -> Użycie wulgaryzmu.
+#31 [remove, severity 2, identity_hate §2.2]
+    Ludzie po sześćdziesiątce nie powinni w ogóle pisać kodu, niech zostawią to forum młodym.
+    -> Atak na grupę ludzi ze względu na wiek.
+#28 [remove, severity 2, obscene §4.1]
+    Wysłałem ci zdjęcia bez ubrań, odpisz jak chcesz więcej ;)
+    -> Komentarz zawiera sugerowanie seksu.
+#27 [remove, severity 2, insult §2.3]
+    Stop whining, you are just too dumb to read the documentation.
+    -> The comment insults another user and calls them dumb.
+#24 [remove, severity 2, spam §4.1]
+    KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY
+    -> Powtarzające się reklamy na kursy.
+#23 [remove, severity 2, identity_hate;spam §5.2]
+    Podaj hasło do konta, to sprawdzę czy masz wirusa: login-check.example
+    -> Phishing attempt and request for personal data.
+#21 [remove, severity 2, identity_hate §2.2]
+    Napiszcie do niego wszyscy na prywatnej i zróbcie mu piekło, należy mu się.
+    -> Komentarz zawiera atak na grupę osób do której należy użytkownik.
+#5 [remove, severity 2, insult §2.1]
+    Only a complete moron would push this to production.
+    -> The comment calls someone a moron.
+#20 [remove, severity 2, insult §2.1]
+    Ty klaunie, idź się lepiej uczyć zamiast zaśmiecać forum.
+    -> Obrażenie innego użytkownika wykorzystując potoczne zwroty.
+#14 [remove, severity 2, identity_hate §2.2]
+    People from that country should not be allowed to post here at all.
+    -> Atak na grupę ludzi ze względu na pochodzenie.
+#12 [remove, severity 2, obscene §4.1]
+    This library is sh*t, the docs are f*cking useless.
+    -> Komentarz zawiera zakłócające wulgaryzmy.
+#11 [remove, severity 2, obscene §4.1]
+    Co za k*rwa żenada, ten framework to dno.
+    -> Komentarz zawiera wulgaryzm.
+#9 [remove, severity 2, threat §3.1]
+    Uważaj co piszesz, wiem gdzie pracujesz i jeszcze się spotkamy.
+    -> Komentarz zawiera groźbę wobec innego użytkownika.
+#8 [remove, severity 2, spam §5.1]
+    Earn $500 a day working from home, click bit.ly/xx-cash now!!!
+    -> Promotion with a suspicious link offering easy money.
+#7 [remove, severity 2, spam §5.1]
+    Kup tanie konto premium na www.super-promo.example, kod RABAT50 daje -50%!
+    -> Niezależnie od zgody administracji, reklama na platformie.
+#38 [remove, severity 2, insult §2.1]
+    Nobody asked for your opinion, you useless clown.
+    -> The comment calls another user a clown and is insulting.
+#29 [review, severity 1, obscene §4.1]
+    Kurde, znowu zapomniałem średnika. Klasyka.
+    -> Potoczne wyrażenie kurde.
+
+Average time per comment: 3.76 s

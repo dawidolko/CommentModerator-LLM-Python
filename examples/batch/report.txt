@@ -1,0 +1,96 @@
+COMMENT MODERATION REPORT
+============================================================
+Source file:   comments.csv
+Model:         qwen2.5:7b
+Created:       2026-11-23 15:58
+Comments:      40
+Toxic:         23 (57%)
+
+Decisions
+------------------------------------------------------------
+  allow       17
+  review       3
+  remove      20
+
+Categories
+------------------------------------------------------------
+  insult           5
+  obscene          5
+  threat           4
+  identity_hate    5
+  spam             5
+  none            17
+
+Removed or sent to review (23)
+------------------------------------------------------------
+#10 [remove, severity 3, threat]
+    If you post that again I will find you and break your fingers.
+    -> Komentarz zawiera groźbę fizycznego szkodzenia innemu użytkownikowi.
+#3 [remove, severity 2, insult]
+    Jesteś totalnym idiotą, nawet pętli nie umiesz napisać.
+    -> Komentarz zawiera obraźliwe słowa w kierunku innego użytkownika.
+#5 [remove, severity 2, insult]
+    Only a complete moron would push this to production.
+    -> The comment insults another user by calling them a moron.
+#36 [remove, severity 2, spam]
+    Check my new crypto token, 1000x guaranteed, link in bio!!!
+    -> Phishing attempt and spam with a promise of high returns.
+#35 [remove, severity 2, threat]
+    Daj mi swój adres, przyjadę i pogadamy inaczej niż na forum.
+    -> Komentarz zawiera groźbę wobec innego użytkownika.
+#33 [remove, severity 2, obscene]
+    Co za ch*jowy pomysł z tym singletonem.
+    -> Użycie obraźliwego słowa.
+#28 [remove, severity 2, obscene]
+    Wysłałem ci zdjęcia bez ubrań, odpisz jak chcesz więcej ;)
+    -> Komentarz zawiera niepokryte sugestie seksualne.
+#27 [remove, severity 2, insult]
+    Stop whining, you are just too dumb to read the documentation.
+    -> The comment insults another user and suggests they are unintelligent.
+#24 [remove, severity 2, spam]
+    KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY
+    -> Powtarzalne reklamy kursów.
+#23 [remove, severity 2, spam;identity_hate]
+    Podaj hasło do konta, to sprawdzę czy masz wirusa: login-check.example
+    -> Phishing attempt and request for personal information.
+#22 [remove, severity 2, threat]
+    Someone should beat up the guy who wrote this plugin.
+    -> Komentarz zawiera groźbę wobec innego użytkownika.
+#21 [remove, severity 2, identity_hate]
+    Napiszcie do niego wszyscy na prywatnej i zróbcie mu piekło, należy mu się.
+    -> Komentarz prosi o atak na osobę prywatnie.
+#20 [remove, severity 2, insult]
+    Ty klaunie, idź się lepiej uczyć zamiast zaśmiecać forum.
+    -> Komentarz zawiera obraźliwe słowa w kierunku innego użytkownika.
+#14 [remove, severity 2, identity_hate]
+    People from that country should not be allowed to post here at all.
+    -> Komentarz atakuje użytkownika na podstawie pochodzenia.
+#13 [remove, severity 2, identity_hate]
+    Kobiety nie nadają się do programowania, niech nie piszą na tym forum.
+    -> Atak na kobiet pochodzenia i zdolności.
+#11 [remove, severity 2, obscene]
+    Co za k*rwa żenada, ten framework to dno.
+    -> Użycie obraźliwego słowa.
+#9 [remove, severity 2, threat]
+    Uważaj co piszesz, wiem gdzie pracujesz i jeszcze się spotkamy.
+    -> Komentarz zawiera groźbę wobec innego użytkownika.
+#8 [remove, severity 2, spam]
+    Earn $500 a day working from home, click bit.ly/xx-cash now!!!
+    -> Promotional message with a link.
+#7 [remove, severity 2, spam]
+    Kup tanie konto premium na www.super-promo.example, kod RABAT50 daje -50%!
+    -> Promocja z linkiem do nieznanego serwisu.
+#38 [remove, severity 2, insult]
+    Nobody asked for your opinion, you useless clown.
+    -> The comment calls another user a clown and is insulting.
+#12 [review, severity 1, obscene]
+    This library is sh*t, the docs are f*cking useless.
+    -> Użytkownik używa obraźliwego języka.
+#29 [review, severity 1, obscene]
+    Kurde, znowu zapomniałem średnika. Klasyka.
+    -> Użycie obraźliwego słowa.
+#31 [review, severity 1, identity_hate]
+    Ludzie po sześćdziesiątce nie powinni w ogóle pisać kodu, niech zostawią to forum młodym.
+    -> Atak na grupę społeczną opartym o wiek.
+
+Average time per comment: 1.99 s

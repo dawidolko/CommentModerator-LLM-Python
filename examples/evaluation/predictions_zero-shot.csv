@@ -1,0 +1,41 @@
+id,text,toxic,categories,severity,decision,reason,rule,latency_s
+1,"Dzięki za odpowiedź, po dodaniu await wszystko działa.",False,none,0,allow,,,1.99
+2,"Ten kod jest napisany fatalnie, nie ma żadnej obsługi błędów i testów.",False,none,0,allow,Harsh but factual criticism of code.,,1.58
+3,"Jesteś totalnym idiotą, nawet pętli nie umiesz napisać.",True,insult,2,remove,Niezaskomlone oskarżenie o brak umiejętności.,,1.84
+4,"Great tutorial, I finally understand how closures work.",False,none,0,allow,,,1.34
+5,Only a complete moron would push this to production.,True,insult,1,review,Niezaskakujące obrażenie.,,1.63
+6,"Ale to jest wkurzające, czwarty raz instaluję sterowniki i dalej nic.",False,none,0,allow,,,1.31
+7,"Kup tanie konto premium na www.super-promo.example, kod RABAT50 daje -50%!",True,spam,2,remove, reklama bez permisy autora,,1.51
+8,"Earn $500 a day working from home, click bit.ly/xx-cash now!!!",True,spam,2,remove,Naruszanie zasady o reklamach i linkach do zarobku.,,1.92
+9,"Uważaj co piszesz, wiem gdzie pracujesz i jeszcze się spotkamy.",True,threat,2,remove,wyraźne zagrożenie,,1.54
+10,If you post that again I will find you and break your fingers.,True,threat,3,remove,wyrażenie groźby,,1.51
+11,"Co za k*rwa żenada, ten framework to dno.",True,obscene;insult,2,remove,Obwąchujące słowa i oskarżenia o brak profesjonalizmu.,,2.2
+12,"This library is sh*t, the docs are f*cking useless.",True,obscene;insult,1,review,Obeliska i nieprofesjonalne słowa.,,2.06
+13,"Kobiety nie nadają się do programowania, niech nie piszą na tym forum.",True,identity_hate,2,remove,Atak na kobiet poświęcony programowaniu.,,1.8
+14,People from that country should not be allowed to post here at all.,True,identity_hate,2,remove,Atak na narodowość.,,1.57
+15,"I could kill for a coffee right now, this debugging session is endless.",False,obscene,1,review,Idiom expressing frustration.,,1.62
+16,"Zabiłeś ten temat, świetna robota z tym poradnikiem!",False,none,0,allow,,,1.41
+17,"Ten film o historii Linuksa to bomba, polecam każdemu.",False,none,0,allow,Idioma.,,1.57
+18,Your answer is wrong: the function returns None when the list is empty.,False,none,0,allow,,,1.32
+19,"Nie rozumiem, czemu React renderuje komponent dwa razy w trybie strict.",False,none,0,allow,Brak naruszeń.,,1.53
+20,"Ty klaunie, idź się lepiej uczyć zamiast zaśmiecać forum.",True,insult,1,review,Niezaskomliwany atak na użytkownika.,,1.8
+21,"Napiszcie do niego wszyscy na prywatnej i zróbcie mu piekło, należy mu się.",True,threat,2,remove,wywołanie do przemocy,,1.61
+22,Someone should beat up the guy who wrote this plugin.,True,insult,2,remove,Napad na osobę.,,1.53
+23,"Podaj hasło do konta, to sprawdzę czy masz wirusa: login-check.example",True,spam,2,remove,Phishing attempt.,,1.38
+24,KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY NA MOJEJ STRONIE KUPUJCIE KURSY,True,spam,2,remove,Nadmiarowe powtarzanie treści.,,1.75
+25,Is there any way to make pandas read_csv faster on a 2 GB file?,False,none,0,allow,,,1.33
+26,"Moim zdaniem Vue jest prostszy od Angulara, ale to kwestia gustu.",False,none,0,allow,Harsh but factual criticism.,,1.52
+27,"Stop whining, you are just too dumb to read the documentation.",True,insult,2,remove,Nieracjonalne oskarżenie o brak umiejętności.,,2.02
+28,"Wysłałem ci zdjęcia bez ubrań, odpisz jak chcesz więcej ;)",True,obscene;spam,2,remove,Nudne prośby o seksualne materiały i spam.,,1.94
+29,"Kurde, znowu zapomniałem średnika. Klasyka.",True,obscene,1,review,Użycie obraźliwej frazy.,,1.86
+30,"Thanks, the fix with useMemo solved the re-rendering problem.",False,none,0,allow,,,1.39
+31,"Ludzie po sześćdziesiątce nie powinni w ogóle pisać kodu, niech zostawią to forum młodym.",True,identity_hate,1,review,Atak na ludzi na podstawie wieku.,,2.0
+32,"Your code is slow because you sort inside the loop, move it outside.",False,none,0,allow,Harsh but factual criticism of code.,,1.63
+33,Co za ch*jowy pomysł z tym singletonem.,True,obscene,1,review,Występują obraźliwe słowa.,,1.84
+34,"This is the worst API design I have ever seen, nothing is consistent.",False,none,0,allow,Harsh but factual criticism.,,1.54
+35,"Daj mi swój adres, przyjadę i pogadamy inaczej niż na forum.",True,threat,2,remove,proponuje osobistą spotkań z groźbami.,,1.79
+36,"Check my new crypto token, 1000x guaranteed, link in bio!!!",True,spam,2,remove,Nadmierny marketing i reklama.,,1.61
+37,"Dobra robota, ale brakuje testów jednostkowych do tej klasy.",False,none,0,allow,Harsh but factual criticism of code.,,1.7
+38,"Nobody asked for your opinion, you useless clown.",True,insult,2,remove,"Nikt Cię nie prosił o opinię, ty bezużyteczny klown.",,2.09
+39,"Grałem wczoraj w tę grę do rana, totalnie mnie rozwaliła fabuła.",False,none,0,allow,,,1.3
+40,"Ugh, I hate Mondays. The build broke again.",False,none,0,allow,,,1.34
