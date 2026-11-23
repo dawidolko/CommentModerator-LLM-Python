@@ -33,7 +33,7 @@ docker compose -f .tools/docker/docker-compose.yml exec app moderator check
 docker compose -f .tools/docker/docker-compose.yml exec app moderator rag "Kup tanie konto premium, kod RABAT50!"
 ```
 
-Files written by the app (`out/`) are bind-mounted back to the host.
+Files written by the app (`out/`) are bind-mounted back to the host. On Windows the same command works in PowerShell or cmd, and `start.bat` runs it in the background; on Linux and macOS `./start.sh` does the same.
 
 ### macOS: use the GPU
 

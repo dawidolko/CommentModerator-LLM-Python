@@ -11,14 +11,15 @@ from moderator.config import ROOT
 from moderator.report import save_chart, save_report
 from moderator.service import MODES, Moderator
 from moderator.web.components import private_folder, stats_tiles
+from moderator.web.i18n import Translator, both_plain, hint, text
 
 COLUMNS = ["id", "decision", "categories", "severity", "rule", "reason", "text"]
 
 
-def build(moderator: Moderator) -> None:
+def build(moderator: Moderator, t: Translator) -> None:
     def run(path: str | None, mode: str, progress=gr.Progress()):
         if not path:
-            raise gr.Error("Upload a .csv or .txt file first.")
+            raise gr.Error(both_plain("error.file"))
         source = Path(path)
         table, _ = moderate_frame(moderator, read_comments(source), mode, progress.tqdm)
         folder = private_folder(moderator.settings.output_dir)
@@ -27,25 +28,33 @@ def build(moderator: Moderator) -> None:
         chart = save_chart(table, folder / f"{source.stem}_chart.svg", f"Moderation of {source.name}")
         return stats_tiles(table), str(chart), table[COLUMNS], [str(csv), str(report), str(chart)]
 
-    with gr.Tab("Batch"):
+    with t.bind(gr.Tab(text("en", "tab.batch")), "tab.batch"):
         with gr.Row(equal_height=False):
             with gr.Column(scale=1, min_width=300):
-                upload = gr.File(
-                    label="Comments (.csv with a text column or .txt)",
-                    file_types=[".csv", ".txt"],
-                    value=str(ROOT / "data" / "comments.csv"),
+                upload = t.bind(
+                    gr.File(
+                        label=text("en", "batch.file"),
+                        file_types=[".csv", ".txt"],
+                        value=str(ROOT / "data" / "comments.csv"),
+                    ),
+                    "batch.file",
                 )
-                mode = gr.Radio(list(MODES), value="few-shot", label="Mode")
-                button = gr.Button("Moderate the file", variant="primary", size="lg")
-                files = gr.File(label="Results: CSV, report.txt, chart.svg", file_count="multiple")
+                mode = t.bind(gr.Radio(list(MODES), value="few-shot", label=text("en", "mode")), "mode")
+                button = t.bind(
+                    gr.Button(text("en", "batch.button"), variant="primary", size="lg"), "batch.button", "value"
+                )
+                files = t.bind(gr.File(label=text("en", "batch.files"), file_count="multiple"), "batch.files")
             with gr.Column(scale=2):
-                tiles = gr.HTML('<p class="hint">Results appear here after the run.</p>', elem_id="batch-tiles")
+                tiles = gr.HTML(hint("batch.hint"), elem_id="batch-tiles")
                 chart = gr.Image(label="Chart", type="filepath", show_label=False)
-        table = gr.Dataframe(
-            label="Moderated comments",
-            wrap=True,
-            max_height=520,
-            column_widths=["5%", "9%", "13%", "8%", "7%", "29%", "29%"],
-            elem_id="batch-table",
+        table = t.bind(
+            gr.Dataframe(
+                label=text("en", "batch.table"),
+                wrap=True,
+                max_height=520,
+                column_widths=["5%", "9%", "13%", "8%", "7%", "29%", "29%"],
+                elem_id="batch-table",
+            ),
+            "batch.table",
         )
         button.click(run, [upload, mode], [tiles, chart, table, files])

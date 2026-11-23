@@ -1,7 +1,8 @@
 """
-HTML pieces shared by the tabs: the header, the verdict card, the statistics tiles and the list of rules. All text
-that comes from a model or a user is escaped before it is put into the page. Files a visitor downloads go to a fresh
-random folder per request, so two people using the app at once never see or overwrite each other's results.
+HTML pieces shared by the tabs: the header, the verdict card, the statistics tiles and the list of rules. Their own
+labels carry both interface languages (see i18n.py). All text that comes from a model or a user is escaped before it
+is put into the page. Files a visitor downloads go to a fresh random folder per request, so two people using the app
+at once never see or overwrite each other's results.
 """
 
 from html import escape
@@ -12,6 +13,7 @@ import pandas as pd
 
 from moderator.rules import Rule, RuleBook
 from moderator.schema import Moderation
+from moderator.web.i18n import both
 
 
 def private_folder(output_dir: Path) -> Path:
@@ -21,24 +23,25 @@ def private_folder(output_dir: Path) -> Path:
 
 
 def header(models: list[tuple[str, str]], missing: list[str] | None, rules: int) -> str:
-    chips = "".join(f'<span class="chip model"><small>{role}</small>{escape(name)}</span>' for role, name in models)
+    chips = "".join(
+        f'<span class="chip model"><small>{both(f"role.{role}")}</small>{escape(name)}</span>' for role, name in models
+    )
     if missing is None:
-        status = '<span class="status down">Ollama unreachable</span>'
+        status = f'<span class="status down">{both("hero.down")}</span>'
     elif missing:
-        status = f'<span class="status warn">missing: {escape(", ".join(missing))}</span>'
+        status = f'<span class="status warn">{both("hero.missing")}: {escape(", ".join(missing))}</span>'
     else:
-        status = '<span class="status up">Ollama connected</span>'
+        status = f'<span class="status up">{both("hero.up")}</span>'
     return (
-        '<div class="hero"><div class="hero-text"><h1>Comment Moderator</h1>'
-        "<p>Forum comment moderation with a local LLM: verdicts, memes, whole files, a chat about them "
-        f"and decisions that cite the forum rules ({rules} paragraphs).</p></div>"
+        f'<div class="hero"><div class="hero-text"><h1>Comment Moderator</h1>'
+        f"<p>{both('hero.text', rules=rules)}</p></div>"
         f'<div class="hero-side">{status}<div class="chips">{chips}</div></div></div>'
     )
 
 
 def severity_meter(level: int) -> str:
     dots = "".join(f'<i class="{"on" if index < level else ""}"></i>' for index in range(3))
-    return f'<span class="severity" title="severity {level} of 3">{dots}<small>{level}/3</small></span>'
+    return f'<span class="severity" title="{level}/3">{dots}<small>{level}/3</small></span>'
 
 
 def verdict_card(result: Moderation, rulebook: RuleBook | None = None) -> str:
@@ -50,7 +53,7 @@ def verdict_card(result: Moderation, rulebook: RuleBook | None = None) -> str:
     ]
     if result.read_text is not None:
         parts.append(
-            f'<div class="read"><span class="label">Read from the image</span><p>{escape(result.read_text)}</p></div>'
+            f'<div class="read"><span class="label">{both("card.read")}</span><p>{escape(result.read_text)}</p></div>'
         )
     parts.append(f'<p class="reason">{escape(verdict.reason)}</p>')
     chips = "".join(f'<span class="chip cat {escape(name)}">{escape(name)}</span>' for name in verdict.categories)
@@ -59,11 +62,11 @@ def verdict_card(result: Moderation, rulebook: RuleBook | None = None) -> str:
         if rulebook is not None and verdict.rule in rulebook:
             rule = rulebook.get(verdict.rule)
             parts.append(
-                f'<div class="cited"><span class="label">Cited rule</span>'
+                f'<div class="cited"><span class="label">{both("card.rule")}</span>'
                 f"<b>{escape(rule.id)} {escape(rule.title)}</b><p>{escape(rule.text)}</p></div>"
             )
         found = "".join(f'<span class="chip ghost">{escape(rule_id)}</span>' for rule_id in result.retrieved)
-        parts.append(f'<div class="retrieved"><span class="label">Retrieved</span>{found}</div>')
+        parts.append(f'<div class="retrieved"><span class="label">{both("card.retrieved")}</span>{found}</div>')
     if result.error:
         parts.append(f'<p class="note">{escape(result.error)}</p>')
     parts.append("</div>")
@@ -73,11 +76,11 @@ def verdict_card(result: Moderation, rulebook: RuleBook | None = None) -> str:
 def stats_tiles(table: pd.DataFrame) -> str:
     decisions = table["decision"].value_counts()
     tiles = [
-        ("comments", len(table), ""),
+        (both("tile.comments"), len(table), ""),
         ("allow", int(decisions.get("allow", 0)), "allow"),
         ("review", int(decisions.get("review", 0)), "review"),
         ("remove", int(decisions.get("remove", 0)), "remove"),
-        ("s per comment", f"{table['latency_s'].mean():.1f}", ""),
+        (both("tile.seconds"), f"{table['latency_s'].mean():.1f}", ""),
     ]
     body = "".join(f'<div class="tile {kind}"><b>{value}</b><span>{name}</span></div>' for name, value, kind in tiles)
     return f'<div class="tiles">{body}</div>'

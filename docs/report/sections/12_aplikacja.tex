@@ -6,7 +6,9 @@ Polecenie \kod{moderator web} (w Dockerze uruchamiane automatycznie) startuje ap
 \url{http://localhost:7860}. Nagłówek pokazuje używane modele i to, czy Ollama odpowiada, więc brakujący model widać
 od razu. Każda zakładka jest osobnym plikiem w \kod{src/moderator/web/tabs/} i korzysta z tej samej klasy
 \kod{Moderator} co terminal. Wynik oceny ma postać karty: kolor i plakietka decyzji, pasek stopnia naruszenia,
-uzasadnienie, kategorie i -- w trybie RAG -- cytowany paragraf razem z jego treścią.
+uzasadnienie, kategorie i -- w trybie RAG -- cytowany paragraf razem z jego treścią. Przyciski nad nagłówkiem
+przełączają język interfejsu (PL / EN) oraz motyw jasny i ciemny; wybór zapamiętuje przeglądarka. Zmienia się tylko
+interfejs, a komentarze, odpowiedzi modelu i regulamin zostają bez zmian.
 
 \zrzut{web_01_single_comment}{Zakładka \emph{Single comment}: groźba oceniona w trybie RAG z cytowanym paragrafem.}
 

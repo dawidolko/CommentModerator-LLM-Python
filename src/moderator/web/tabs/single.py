@@ -9,6 +9,7 @@ import gradio as gr
 from moderator.config import ROOT
 from moderator.service import MODES, Moderator
 from moderator.web.components import verdict_card
+from moderator.web.i18n import Translator, both_plain, hint, text
 
 EXAMPLES = [
     "Jesteś totalnym idiotą, nawet pętli nie umiesz napisać.",
@@ -16,44 +17,45 @@ EXAMPLES = [
     "Earn $500 a day working from home, click bit.ly/xx-cash now!!!",
     "Ten kod jest napisany fatalnie, nie ma żadnej obsługi błędów i testów.",
 ]
-
-PLACEHOLDER = (
-    '<p class="hint">The verdict appears here: decision, severity, categories, the reason and, '
-    "in the RAG mode, the cited rule.</p>"
-)
+EXAMPLES_LABEL = "Examples · Przykłady"
 
 
-def build(moderator: Moderator) -> None:
-    def check_text(text: str, mode: str) -> str:
-        if not text.strip():
-            raise gr.Error("Write a comment first.")
-        return verdict_card(moderator.text(text, mode), moderator.rulebook)
+def build(moderator: Moderator, t: Translator) -> None:
+    def check_text(comment: str, mode: str) -> str:
+        if not comment.strip():
+            raise gr.Error(both_plain("error.comment"))
+        return verdict_card(moderator.text(comment, mode), moderator.rulebook)
 
     def check_image(path: str | None, mode: str) -> str:
         if not path:
-            raise gr.Error("Upload an image first.")
+            raise gr.Error(both_plain("error.image"))
         return verdict_card(moderator.image(Path(path), mode), moderator.rulebook)
 
     images = sorted(str(path) for path in (ROOT / "data" / "images").glob("*.png"))
 
-    with gr.Tab("Single comment"):
+    with t.bind(gr.Tab(text("en", "tab.single")), "tab.single"):
         with gr.Row():
             with gr.Column():
-                text = gr.Textbox(label="Comment", lines=4, placeholder="Paste a comment in Polish or English")
-                mode = gr.Radio(list(MODES), value="rag", label="Mode")
-                button = gr.Button("Moderate", variant="primary", size="lg")
-                gr.Examples(EXAMPLES, inputs=text, label="Try one")
-            result = gr.HTML(PLACEHOLDER)
-        button.click(check_text, [text, mode], result)
-        text.submit(check_text, [text, mode], result)
+                comment = t.bind_with(
+                    gr.Textbox(label=text("en", "comment"), lines=4, placeholder=text("en", "comment.placeholder")),
+                    lambda lang: {"label": text(lang, "comment"), "placeholder": text(lang, "comment.placeholder")},
+                )
+                mode = t.bind(gr.Radio(list(MODES), value="rag", label=text("en", "mode")), "mode")
+                button = t.bind(gr.Button(text("en", "moderate"), variant="primary", size="lg"), "moderate", "value")
+                gr.Examples(EXAMPLES, inputs=comment, label=EXAMPLES_LABEL)
+            result = gr.HTML(hint("verdict.hint"))
+        button.click(check_text, [comment, mode], result)
+        comment.submit(check_text, [comment, mode], result)
 
-    with gr.Tab("Image"):
+    with t.bind(gr.Tab(text("en", "tab.image")), "tab.image"):
         with gr.Row():
             with gr.Column():
-                image = gr.Image(type="filepath", label="Meme or screenshot", height=320)
-                image_mode = gr.Radio(list(MODES), value="rag", label="Mode for the text read from the image")
-                image_button = gr.Button("Read and moderate", variant="primary", size="lg")
+                image = t.bind(gr.Image(type="filepath", label=text("en", "image"), height=320), "image")
+                image_mode = t.bind(gr.Radio(list(MODES), value="rag", label=text("en", "image.mode")), "image.mode")
+                image_button = t.bind(
+                    gr.Button(text("en", "image.button"), variant="primary", size="lg"), "image.button", "value"
+                )
                 if images:
-                    gr.Examples(images, inputs=image, label="Sample memes and screenshots", examples_per_page=6)
-            image_result = gr.HTML(PLACEHOLDER)
+                    gr.Examples(images, inputs=image, label=EXAMPLES_LABEL, examples_per_page=6)
+            image_result = gr.HTML(hint("verdict.hint"))
         image_button.click(check_image, [image, image_mode], image_result)

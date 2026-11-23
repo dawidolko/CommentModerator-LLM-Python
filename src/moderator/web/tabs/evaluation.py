@@ -6,15 +6,16 @@ import gradio as gr
 
 from moderator.config import ROOT
 from moderator.service import Moderator
+from moderator.web.i18n import Translator, hint, text
 
 FOLDER = ROOT / "examples" / "evaluation"
 
 
-def build(moderator: Moderator) -> None:
-    with gr.Tab("Evaluation"):
+def build(moderator: Moderator, t: Translator) -> None:
+    with t.bind(gr.Tab(text("en", "tab.evaluation")), "tab.evaluation"):
         summary = FOLDER / "evaluation.md"
         if not summary.exists():
-            gr.Markdown("No results yet. Run `moderator evaluate` to create them.")
+            gr.HTML(hint("evaluation.empty"))
             return
         chart = FOLDER / "classification.svg"
         if chart.exists():

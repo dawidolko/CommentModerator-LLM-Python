@@ -25,7 +25,7 @@ Everything runs locally: `qwen2.5:7b` for text, `gemma3:4b` for images and `nomi
 - 🗨️ **Chat about a file** — the comments are moderated once, then the model answers questions about them with history; `/report`, `/chart` and `/save` write the output files.
 - 📜 **RAG over the forum rules** — 14 paragraphs searched with BM25, embeddings or both (Reciprocal Rank Fusion); the model must cite a paragraph that exists, or the comment goes to review.
 - 📊 **Honest evaluation** — toxic-bert, LLM zero-shot, few-shot and RAG compared on 40 labelled comments, plus retrieval recall for the three search methods.
-- 🖥️ **Two interfaces, one core** — a `moderator` CLI (Typer + Rich) and a Gradio web app with five tabs, both built on the same `Moderator` class.
+- 🖥️ **Two interfaces, one core** — a `moderator` CLI (Typer + Rich) and a Gradio web app with six tabs, a Polish / English interface and a light / dark theme, both built on the same `Moderator` class.
 - 🐳 **One-command start** — Docker Compose starts Ollama, pulls the models and serves the app.
 
 ---
@@ -140,27 +140,52 @@ What the numbers say:
 
 ### Run with Docker (recommended)
 
+The same Compose file runs on every system. It starts Ollama, pulls the three models on the first run (about 8 GB) and serves the app at **http://localhost:7860**.
+
+**Windows** (PowerShell or cmd, Docker Desktop running):
+
+```powershell
+git clone https://github.com/dawidolko/CommentModerator-LLM-Python.git
+cd CommentModerator-LLM-Python
+docker compose -f .tools/docker/docker-compose.yml up --build
+```
+
+or just double-click / run `start.bat`, which starts the stack in the background and waits until the app answers.
+
+**Linux**:
+
 ```bash
 git clone https://github.com/dawidolko/CommentModerator-LLM-Python.git
 cd CommentModerator-LLM-Python
 docker compose -f .tools/docker/docker-compose.yml up --build
 ```
 
-Ollama starts, the three models are pulled on the first run, and the app is served at **http://localhost:7860**. The CLI runs in the same container:
+or `./start.sh`. Ollama in the container runs on the CPU, so one comment takes tens of seconds instead of a few.
+
+**macOS**: Docker on a Mac cannot use the Apple GPU, so with [Ollama](https://ollama.com/download) installed natively the app container should use it (37.8 s → 4.8 s per comment in our test):
 
 ```bash
-docker compose -f .tools/docker/docker-compose.yml exec app moderator check
-docker compose -f .tools/docker/docker-compose.yml exec app moderator rag "Kup tanie konto premium, kod RABAT50!"
+git clone https://github.com/dawidolko/CommentModerator-LLM-Python.git
+cd CommentModerator-LLM-Python
+./start.sh
 ```
 
-On macOS, Docker cannot use the GPU. With Ollama installed natively, point the app container at it instead (several times faster):
+`start.sh` pulls the models into the native Ollama if needed and runs only the app container, the same as:
 
 ```bash
 OLLAMA_HOST=http://host.docker.internal:11434 \
   docker compose -f .tools/docker/docker-compose.yml up --build --no-deps app
 ```
 
-`./start.sh` (macOS, Linux) picks this automatically when it finds Ollama running; `start.bat` starts the full stack on Windows.
+Without native Ollama, the plain `docker compose ... up --build` works on a Mac too, only slower.
+
+**Every system**, the CLI inside the running container and stopping the stack:
+
+```bash
+docker compose -f .tools/docker/docker-compose.yml exec app moderator check
+docker compose -f .tools/docker/docker-compose.yml exec app moderator rag "Kup tanie konto premium, kod RABAT50!"
+docker compose -f .tools/docker/docker-compose.yml down
+```
 
 ### Run on the host
 
@@ -199,6 +224,8 @@ Step-by-step instructions for Windows and Linux, and every configuration variabl
 | **Chat about a file** | Load a TXT, ask questions, save the report, the chart and the chat log |
 | **Rules (RAG)** | The 14 paragraphs and a search box for BM25, dense or hybrid retrieval |
 | **Evaluation** | The results of `moderator evaluate` |
+
+The toolbar above the header switches the interface between **English and Polish** (PL / EN) and between the **light and dark** theme; both choices are remembered in the browser. Only the interface changes language: comments, model answers and the forum rules stay as they are.
 
 ---
 
