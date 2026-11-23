@@ -70,3 +70,11 @@ def test_read_comments_from_txt_numbers_the_lines(tmp_path):
     frame = read_comments(source)
     assert frame["id"].tolist() == [1, 2]
     assert frame["text"].tolist() == ["first", "second"]
+
+
+def test_every_web_request_gets_its_own_folder(tmp_path):
+    from moderator.web.components import private_folder
+
+    first, second = private_folder(tmp_path), private_folder(tmp_path)
+    assert first != second
+    assert first.parent == second.parent == tmp_path / "web"

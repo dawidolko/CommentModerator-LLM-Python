@@ -9,6 +9,7 @@ import gradio as gr
 from moderator.chat import ChatSession
 from moderator.config import ROOT
 from moderator.service import Moderator
+from moderator.web.components import private_folder
 
 QUESTIONS = [
     "Które komentarze są groźbami i dlaczego?",
@@ -38,7 +39,13 @@ def build(moderator: Moderator) -> None:
     def export(session: ChatSession | None):
         if session is None:
             raise gr.Error("Load a file first.")
-        return [str(session.report()), str(session.chart()), str(session.save_log())]
+        folder = private_folder(moderator.settings.output_dir)
+        paths = (
+            session.report(folder / "report.txt"),
+            session.chart(folder / "chart.svg"),
+            session.save_log(folder / "chat_log.txt"),
+        )
+        return [str(path) for path in paths]
 
     with gr.Tab("Chat about a file"):
         session = gr.State(None)

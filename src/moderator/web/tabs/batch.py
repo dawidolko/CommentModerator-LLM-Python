@@ -10,7 +10,7 @@ from moderator.batch import moderate_frame, read_comments, save
 from moderator.config import ROOT
 from moderator.report import save_chart, save_report
 from moderator.service import MODES, Moderator
-from moderator.web.components import stats_tiles
+from moderator.web.components import private_folder, stats_tiles
 
 COLUMNS = ["id", "decision", "categories", "severity", "rule", "reason", "text"]
 
@@ -21,7 +21,7 @@ def build(moderator: Moderator) -> None:
             raise gr.Error("Upload a .csv or .txt file first.")
         source = Path(path)
         table, _ = moderate_frame(moderator, read_comments(source), mode, progress.tqdm)
-        folder = moderator.settings.output_dir / "web"
+        folder = private_folder(moderator.settings.output_dir)
         csv = save(table, folder / f"{source.stem}_moderated.csv")
         report = save_report(table, folder / f"{source.stem}_report.txt", source.name, moderator.settings.text_model)
         chart = save_chart(table, folder / f"{source.stem}_chart.svg", f"Moderation of {source.name}")

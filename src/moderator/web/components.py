@@ -1,14 +1,23 @@
 """
 HTML pieces shared by the tabs: the header, the verdict card, the statistics tiles and the list of rules. All text
-that comes from a model or a user is escaped before it is put into the page.
+that comes from a model or a user is escaped before it is put into the page. Files a visitor downloads go to a fresh
+random folder per request, so two people using the app at once never see or overwrite each other's results.
 """
 
 from html import escape
+from pathlib import Path
+from uuid import uuid4
 
 import pandas as pd
 
 from moderator.rules import Rule, RuleBook
 from moderator.schema import Moderation
+
+
+def private_folder(output_dir: Path) -> Path:
+    folder = output_dir / "web" / uuid4().hex
+    folder.mkdir(parents=True, exist_ok=True)
+    return folder
 
 
 def header(models: list[tuple[str, str]], missing: list[str] | None, rules: int) -> str:
