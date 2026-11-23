@@ -1,0 +1,36 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# --- Virtual environments and secrets ---
+.venv/
+venv/
+.env
+
+# --- Tests / tooling ---
+.pytest_cache/
+.coverage
+
+# --- Generated at runtime (examples/ keeps the results of real runs) ---
+out/
+.gradio/
+dist/
+
+# --- Report build files (the PNG screenshots are rendered from these SVGs) ---
+docs/report/svg/
+docs/report/*.aux
+docs/report/*.log
+docs/report/*.out
+docs/report/*.toc
+
+# --- IDE / system ---
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Machine-local Claude settings
+.claude/settings.local.json

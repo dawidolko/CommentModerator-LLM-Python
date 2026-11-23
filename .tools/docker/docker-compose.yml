@@ -1,0 +1,65 @@
+# =============================================================================
+# Comment Moderator: one-command run.
+#
+#   docker compose -f .tools/docker/docker-compose.yml up --build
+#
+# Starts Ollama, pulls the three models on the first run and serves the web app
+# on http://localhost:7860. On macOS Docker cannot use the GPU, so with Ollama
+# installed natively the app can use it instead (much faster, see the README):
+#
+#   OLLAMA_HOST=http://host.docker.internal:11434 \
+#     docker compose -f .tools/docker/docker-compose.yml up --build --no-deps app
+# =============================================================================
+
+name: comment-moderator
+
+services:
+  ollama:
+    image: ollama/ollama:0.32.6
+    restart: unless-stopped
+    volumes:
+      - ${OLLAMA_DATA:-ollama}:/root/.ollama
+    environment:
+      OLLAMA_KEEP_ALIVE: 30m
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  models:
+    image: ollama/ollama:0.32.6
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["sh", "-c"]
+    command:
+      - ollama pull ${TEXT_MODEL:-qwen2.5:7b} && ollama pull ${VISION_MODEL:-gemma3:4b} && ollama pull ${EMBED_MODEL:-nomic-embed-text}
+    restart: "no"
+
+  app:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+    depends_on:
+      models:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    environment:
+      OLLAMA_HOST: ${OLLAMA_HOST:-http://ollama:11434}
+      TEXT_MODEL: ${TEXT_MODEL:-qwen2.5:7b}
+      VISION_MODEL: ${VISION_MODEL:-gemma3:4b}
+      EMBED_MODEL: ${EMBED_MODEL:-nomic-embed-text}
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - "${APP_PORT:-7860}:7860"
+    volumes:
+      - ../../out:/app/out
+      - huggingface:/app/.cache/huggingface
+
+volumes:
+  ollama:
+  huggingface:

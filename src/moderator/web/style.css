@@ -1,0 +1,87 @@
+/*
+ * Styles of the web app on top of the Gradio Soft theme: the header, the verdict card coloured by decision, category
+ * chips, the severity meter, statistics tiles and the rules list. Colours use Gradio's variables or translucent tones,
+ * so the page reads well in both the light and the dark theme.
+ */
+
+.gradio-container { max-width: 1280px !important; margin: 0 auto !important; }
+
+.hero {
+  display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;
+  padding: 26px 30px; border-radius: 18px; color: #fff;
+  background: radial-gradient(circle at 85% 20%, rgba(255, 255, 255, 0.18), transparent 40%),
+    linear-gradient(120deg, #312e81 0%, #4f46e5 55%, #7c3aed 100%);
+  box-shadow: 0 12px 30px rgba(79, 70, 229, 0.25);
+}
+.hero h1 { margin: 0 0 6px; font-size: 2rem; letter-spacing: -0.02em; color: #fff !important; }
+.hero p { margin: 0; max-width: 640px; line-height: 1.5; color: rgba(255, 255, 255, 0.88) !important; }
+.hero-side { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.hero .chip.model { background: rgba(255, 255, 255, 0.14); color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); }
+.hero .chip.model small { opacity: 0.7; margin-right: 6px; text-transform: uppercase; font-size: 0.68em; }
+.status { padding: 4px 12px; border-radius: 999px; font-size: 0.85em; font-weight: 600; }
+.status::before { content: "●"; margin-right: 6px; }
+.status.up { background: rgba(34, 197, 94, 0.2); color: #bbf7d0; }
+.status.warn { background: rgba(234, 179, 8, 0.25); color: #fef08a; }
+.status.down { background: rgba(239, 68, 68, 0.25); color: #fecaca; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; padding: 3px 11px; border-radius: 999px; font-size: 0.85em; font-weight: 600; }
+.chip.ghost { border: 1px solid var(--border-color-primary); color: var(--body-text-color-subdued); font-weight: 500; }
+.chip.cat { background: rgba(100, 116, 139, 0.15); color: var(--body-text-color); }
+.chip.cat.insult { background: rgba(249, 115, 22, 0.18); color: #c2410c; }
+.chip.cat.obscene { background: rgba(236, 72, 153, 0.16); color: #be185d; }
+.chip.cat.threat { background: rgba(239, 68, 68, 0.16); color: #b91c1c; }
+.chip.cat.identity_hate { background: rgba(168, 85, 247, 0.16); color: #7e22ce; }
+.chip.cat.spam { background: rgba(14, 165, 233, 0.16); color: #0369a1; }
+.chip.cat.none { background: rgba(34, 197, 94, 0.16); color: #15803d; }
+
+.verdict {
+  --tone: #64748b;
+  border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;
+  border: 1px solid var(--border-color-primary); border-top: 5px solid var(--tone);
+  background: var(--block-background-fill); box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+.verdict.allow { --tone: #16a34a; }
+.verdict.review { --tone: #d97706; }
+.verdict.remove { --tone: #dc2626; }
+.verdict-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.verdict .badge { padding: 5px 16px; border-radius: 999px; font-weight: 800; letter-spacing: 0.06em; color: #fff; background: var(--tone); }
+.verdict .meta { margin-left: auto; font-size: 0.82em; color: var(--body-text-color-subdued); }
+.verdict .reason { margin: 0; font-size: 1.08em; line-height: 1.5; }
+.verdict .label {
+  display: block; margin-bottom: 4px; font-size: 0.72em; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--body-text-color-subdued);
+}
+.verdict .read, .verdict .cited { padding: 12px 14px; border-radius: 12px; background: rgba(100, 116, 139, 0.08); }
+.verdict .read p, .verdict .cited p { margin: 4px 0 0; font-size: 0.92em; line-height: 1.5; }
+.verdict .cited { border-left: 4px solid var(--color-accent); }
+.verdict .cited b { color: var(--color-accent); }
+.verdict .retrieved { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.verdict .retrieved .label { margin: 0 6px 0 0; }
+.verdict .note { margin: 0; font-size: 0.85em; color: #b45309; }
+
+.severity { display: inline-flex; align-items: center; gap: 4px; }
+.severity i { width: 22px; height: 8px; border-radius: 4px; background: rgba(100, 116, 139, 0.25); }
+.severity i.on { background: var(--tone); }
+.severity small { margin-left: 4px; color: var(--body-text-color-subdued); }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+.tile {
+  --tone: var(--color-accent);
+  padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border-color-primary);
+  background: var(--block-background-fill); border-bottom: 4px solid var(--tone);
+}
+.tile.allow { --tone: #16a34a; }
+.tile.review { --tone: #d97706; }
+.tile.remove { --tone: #dc2626; }
+.tile b { display: block; font-size: 1.7em; line-height: 1.1; }
+.tile span { font-size: 0.85em; color: var(--body-text-color-subdued); }
+
+.rule { padding: 10px 14px; margin: 0 0 8px; border-radius: 12px; border: 1px solid var(--border-color-primary); }
+.rule b { color: var(--color-accent); }
+.rule p { margin: 4px 0 0; font-size: 0.9em; line-height: 1.5; }
+
+.hint { color: var(--body-text-color-subdued); font-size: 0.9em; }
+
+#batch-table table, #batch-table td, #batch-table th { font-family: var(--font) !important; font-size: 0.9em; }
+#batch-table th { text-transform: none; white-space: nowrap; }
