@@ -4,7 +4,6 @@
  * so the page reads well in both the light and the dark theme.
  */
 
-.gradio-container { max-width: 1280px !important; margin: 0 auto !important; }
 
 .hero {
   display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;
@@ -82,7 +81,7 @@
 .rule p { margin: 4px 0 0; font-size: 0.9em; line-height: 1.5; }
 
 
-#batch-table table, #batch-table td, #batch-table th { font-family: var(--font) !important; font-size: 0.9em; }
+#batch-table table, #batch-table td, #batch-table th, #batch-table td * { font-family: var(--font) !important; font-size: 0.92em; }
 #batch-table th { text-transform: none; white-space: nowrap; }
 
 .hint { margin: 0; padding: 18px 20px; border-radius: 14px; border: 1px dashed var(--border-color-primary);
@@ -106,3 +105,12 @@ body.lang-pl .t-en { display: none !important; }
 .dark .chip.cat.none { color: #86efac; }
 .dark .verdict .note { color: #fcd34d; }
 .dark .verdict { box-shadow: none; }
+
+.verdict { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 10px 24px -14px rgba(15, 23, 42, 0.25); }
+.tile { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 8px 18px -14px rgba(15, 23, 42, 0.22); }
+.rule { background: var(--block-background-fill); }
+.hint { min-height: 76px; box-sizing: border-box; background: rgba(255, 255, 255, 0.55); }
+.dark .hint { background: rgba(255, 255, 255, 0.03); }
+#toolbar button { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08); }
+button[role="tab"] { font-weight: 500; }
+button[role="tab"][aria-selected="true"] { font-weight: 600; }

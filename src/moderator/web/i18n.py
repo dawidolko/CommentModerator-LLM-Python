@@ -163,3 +163,8 @@ class Translator:
 
     def updates(self, lang: str) -> list:
         return [gr.update(**render(lang)) for _, render in self.bindings]
+
+    def restore(self, lang: str) -> list:
+        if lang not in LANGUAGES or lang == "en":
+            return [gr.skip() for _ in self.bindings]
+        return self.updates(lang)

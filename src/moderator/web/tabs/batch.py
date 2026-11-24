@@ -26,7 +26,12 @@ def build(moderator: Moderator, t: Translator) -> None:
         csv = save(table, folder / f"{source.stem}_moderated.csv")
         report = save_report(table, folder / f"{source.stem}_report.txt", source.name, moderator.settings.text_model)
         chart = save_chart(table, folder / f"{source.stem}_chart.svg", f"Moderation of {source.name}")
-        return stats_tiles(table), str(chart), table[COLUMNS], [str(csv), str(report), str(chart)]
+        return (
+            stats_tiles(table),
+            gr.update(value=str(chart), visible=True),
+            gr.update(value=table[COLUMNS], visible=True),
+            gr.update(value=[str(csv), str(report), str(chart)], visible=True),
+        )
 
     with t.bind(gr.Tab(text("en", "tab.batch")), "tab.batch"):
         with gr.Row(equal_height=False):
@@ -43,10 +48,12 @@ def build(moderator: Moderator, t: Translator) -> None:
                 button = t.bind(
                     gr.Button(text("en", "batch.button"), variant="primary", size="lg"), "batch.button", "value"
                 )
-                files = t.bind(gr.File(label=text("en", "batch.files"), file_count="multiple"), "batch.files")
+                files = t.bind(
+                    gr.File(label=text("en", "batch.files"), file_count="multiple", visible=False), "batch.files"
+                )
             with gr.Column(scale=2):
                 tiles = gr.HTML(hint("batch.hint"), elem_id="batch-tiles")
-                chart = gr.Image(label="Chart", type="filepath", show_label=False)
+                chart = gr.Image(label="Chart", type="filepath", show_label=False, visible=False)
         table = t.bind(
             gr.Dataframe(
                 label=text("en", "batch.table"),
@@ -54,6 +61,7 @@ def build(moderator: Moderator, t: Translator) -> None:
                 max_height=520,
                 column_widths=["5%", "9%", "13%", "8%", "7%", "29%", "29%"],
                 elem_id="batch-table",
+                visible=False,
             ),
             "batch.table",
         )
