@@ -55,7 +55,7 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     ports:
-      - "${APP_PORT:-7860}:7860"
+      - "${APP_BIND:-127.0.0.1}:${APP_PORT:-7860}:7860"
     volumes:
       - ../../out:/app/out
       - huggingface:/app/.cache/huggingface

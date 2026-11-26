@@ -24,7 +24,7 @@ The stack has three services:
 
 - `ollama` serves the models on port 11434 inside the Compose network; the models live in the `ollama` volume,
 - `models` runs once, pulls the three models and exits,
-- `app` waits for `models`, then serves the web app on <http://localhost:7860>.
+- `app` waits for `models`, then serves the web app on <http://localhost:7860>. The port is published on `127.0.0.1` only, because the app has no login; set `APP_BIND=0.0.0.0` only behind a reverse proxy that adds authentication.
 
 The CLI runs in the same container:
 
